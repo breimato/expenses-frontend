@@ -1,0 +1,9 @@
+.amount {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.negative {
+  color: var(--color-accent);
+}

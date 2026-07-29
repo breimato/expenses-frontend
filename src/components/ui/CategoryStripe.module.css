@@ -1,0 +1,7 @@
+.stripe {
+  display: inline-block;
+  width: 4px;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+}

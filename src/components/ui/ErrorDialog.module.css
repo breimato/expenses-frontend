@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.guide {
+  border-color: var(--color-secondary);
+}
+
+.error {
+  border-color: var(--color-danger);
+}

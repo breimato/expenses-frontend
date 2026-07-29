@@ -1,0 +1,14 @@
+.state {
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.error {
+  color: var(--color-danger);
+  border-color: rgb(166 61 61 / 0.25);
+  background: rgb(166 61 61 / 0.08);
+}

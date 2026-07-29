@@ -1,0 +1,65 @@
+import type { FetchAPI } from '@/api/generated';
+
+/**
+ * OpenAPI defines several GET endpoints with a JSON body.
+ * Browser fetch() rejects GET requests that include a body.
+ * XMLHttpRequest supports this pattern and matches curl/Spring behavior.
+ */
+export const fetchApi: FetchAPI = async (url, init) => {
+  const requestUrl = url.toString();
+  const method = init?.method?.toUpperCase() ?? 'GET';
+  const hasBody = init?.body !== undefined && init?.body !== null && init?.body !== '';
+
+  if (method === 'GET' && hasBody) {
+    return xhrGetWithBody(requestUrl, init);
+  }
+
+  return fetch(url, init);
+};
+
+function xhrGetWithBody(url: string, init: RequestInit): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.responseType = 'text';
+
+    if (init.headers) {
+      for (const [key, value] of Object.entries(init.headers as Record<string, string>)) {
+        xhr.setRequestHeader(key, String(value));
+      }
+    }
+
+    xhr.onload = () => {
+      resolve(
+        new Response(xhr.responseText, {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseResponseHeaders(xhr.getAllResponseHeaders()),
+        }),
+      );
+    };
+
+    xhr.onerror = () => reject(new TypeError('Failed to fetch'));
+    xhr.send(init.body as XMLHttpRequestBodyInit);
+  });
+}
+
+function parseResponseHeaders(rawHeaders: string): Headers {
+  const headers = new Headers();
+
+  rawHeaders
+    .trim()
+    .split(/[\r\n]+/)
+    .filter(Boolean)
+    .forEach((line) => {
+      const separatorIndex = line.indexOf(':');
+      if (separatorIndex === -1) {
+        return;
+      }
+      const key = line.slice(0, separatorIndex).trim();
+      const value = line.slice(separatorIndex + 1).trim();
+      headers.append(key, value);
+    });
+
+  return headers;
+}

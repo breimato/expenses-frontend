@@ -1,0 +1,6 @@
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: var(--space-sm) 0 var(--space-md);
+}

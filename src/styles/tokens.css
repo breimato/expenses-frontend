@@ -1,0 +1,78 @@
+/* Cuaderno de gastos — design tokens */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --color-paper: #e6e1d8;
+  --color-paper-elevated: #faf8f5;
+  --color-ink: #1a1814;
+  --color-ink-muted: #524c44;
+  --color-ink-faint: #8a847a;
+  --color-border: #d8d2c6;
+  --color-border-strong: #1a1814;
+
+  /* Accents */
+  --color-accent: #2d4a3e;
+  --color-accent-hover: #243d32;
+  --color-sage: #4a7261;
+  --color-danger: #a63d3d;
+  --color-secondary: #8b6914;
+  --color-on-accent: #f5f3ef;
+  --color-surface: #faf8f5;
+  --color-text: #1a1814;
+  --color-text-muted: #524c44;
+  --color-input-hover-border: #d4cdc2;
+
+  /* Typography */
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Layout */
+  --nav-rail-width: 11rem;
+  --bottom-nav-height: 3.5rem;
+  --content-max-width: 56rem;
+
+  /* Misc */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: 120ms ease;
+  --transition-base: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  --color-overlay: rgb(28 25 23 / 40%);
+  --color-row-alt: rgb(0 0 0 / 3%);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-paper: #2c2924;
+  --color-paper-elevated: #37342e;
+  --color-ink: #ede8e0;
+  --color-ink-muted: #a8a093;
+  --color-ink-faint: #7a756c;
+  --color-border: #454038;
+  --color-border-strong: #ede8e0;
+
+  --color-accent: #4a7261;
+  --color-accent-hover: #5a8674;
+  --color-sage: #8ec4a8;
+  --color-danger: #e07a7a;
+  --color-secondary: #c4a035;
+  --color-on-accent: #f0ebe3;
+  --color-surface: #37342e;
+  --color-text: #ede8e0;
+  --color-text-muted: #a8a093;
+  --color-input-hover-border: #565048;
+
+  --color-overlay: rgb(0 0 0 / 55%);
+  --color-row-alt: rgb(255 255 255 / 3%);
+}
