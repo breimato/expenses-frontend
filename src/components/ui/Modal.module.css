@@ -16,12 +16,10 @@
 }
 
 .panel {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 30rem;
   max-height: 90dvh;
-  overflow: hidden;
+  overflow-y: auto;
   padding: var(--space-xl);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -35,7 +33,6 @@
   justify-content: space-between;
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
-  flex-shrink: 0;
 }
 
 .title {
@@ -43,20 +40,10 @@
   font-size: 1.5rem;
 }
 
-.formShell {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  flex: 1;
-}
-
 .form {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  min-height: 0;
-  overflow-y: auto;
-  padding-right: var(--space-xs);
 }
 
 .actions {
@@ -66,5 +53,4 @@
   margin-top: var(--space-lg);
   padding-top: var(--space-lg);
   border-top: 1px solid var(--color-border);
-  flex-shrink: 0;
 }
