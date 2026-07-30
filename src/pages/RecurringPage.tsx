@@ -32,7 +32,6 @@ type TemplateFormState = {
   label: string;
   amount: string;
   categoryId: string;
-  sortOrder: string;
   movementType: MovementTypeV1;
   offsetsSpendingAverage: boolean;
   frequency: RecurringFrequencyV1;
@@ -45,7 +44,6 @@ const emptyForm = (): TemplateFormState => ({
   label: '',
   amount: '',
   categoryId: '',
-  sortOrder: '0',
   movementType: 'EXPENSE',
   offsetsSpendingAverage: false,
   frequency: 'MANUAL',
@@ -90,18 +88,17 @@ export function RecurringPage() {
 
   const openEdit = (template: RecurringTemplateV1) => {
     setEditing(template);
-    setForm({
-      label: template.label ?? '',
-      amount: template.amount ?? '',
-      categoryId: String(template.categoryId ?? ''),
-      sortOrder: String(template.sortOrder ?? 0),
-      movementType: template.movementType ?? 'EXPENSE',
-      offsetsSpendingAverage: template.offsetsSpendingAverage ?? false,
-      frequency: template.frequency ?? 'MANUAL',
-      dayOfMonth: String(template.dayOfMonth ?? 1),
-      autoApply: template.autoApply ?? false,
-      enabled: template.enabled ?? true,
-    });
+      setForm({
+        label: template.label ?? '',
+        amount: template.amount ?? '',
+        categoryId: String(template.categoryId ?? ''),
+        movementType: template.movementType ?? 'EXPENSE',
+        offsetsSpendingAverage: template.offsetsSpendingAverage ?? false,
+        frequency: template.frequency ?? 'MANUAL',
+        dayOfMonth: String(template.dayOfMonth ?? 1),
+        autoApply: template.autoApply ?? false,
+        enabled: template.enabled ?? true,
+      });
     setModalOpen(true);
   };
 
@@ -116,7 +113,6 @@ export function RecurringPage() {
       label: form.label,
       amount: form.amount,
       categoryId: Number(form.categoryId),
-      sortOrder: Number(form.sortOrder),
       movementType: form.movementType,
       offsetsSpendingAverage: form.offsetsSpendingAverage,
       frequency: form.frequency,
@@ -370,13 +366,6 @@ export function RecurringPage() {
               />
               <span>La plantilla está habilitada</span>
             </label>
-          </Field>
-          <Field label="Orden">
-            <Input
-              type="number"
-              value={form.sortOrder}
-              onChange={(e) => setForm({ ...form, sortOrder: e.target.value })}
-            />
           </Field>
         </Modal>
       )}

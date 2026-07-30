@@ -23,7 +23,6 @@ type CategoryFormState = {
   name: string;
   color: string;
   icon: string;
-  sortOrder: string;
   movementType: MovementTypeV1;
 };
 
@@ -31,7 +30,6 @@ const emptyForm = (): CategoryFormState => ({
   name: '',
   color: '#6B7280',
   icon: '',
-  sortOrder: '1',
   movementType: 'EXPENSE',
 });
 
@@ -51,8 +49,7 @@ export function CategoriesPage() {
 
   const openCreate = () => {
     setEditing(null);
-    const nextOrder = categories.length + 1;
-    setForm({ ...emptyForm(), sortOrder: String(nextOrder) });
+    setForm(emptyForm());
     setModalOpen(true);
   };
 
@@ -62,7 +59,6 @@ export function CategoriesPage() {
       name: category.name ?? '',
       color: category.color ?? '#6B7280',
       icon: category.icon ?? '',
-      sortOrder: String(category.sortOrder ?? 1),
       movementType: category.movementType ?? 'EXPENSE',
     });
     setModalOpen(true);
@@ -81,7 +77,6 @@ export function CategoriesPage() {
           name: form.name,
           color: form.color,
           icon: form.icon || null,
-          sortOrder: Number(form.sortOrder),
           movementType: form.movementType,
         };
         await updateCategory.mutateAsync({ id: editing.id, body });
@@ -90,7 +85,6 @@ export function CategoriesPage() {
           name: form.name,
           color: form.color,
           icon: form.icon || null,
-          sortOrder: Number(form.sortOrder),
           movementType: form.movementType,
         };
         await createCategory.mutateAsync(body);
@@ -132,7 +126,7 @@ export function CategoriesPage() {
       {isError && <StateMessage message="Error al cargar categorías" variant="error" />}
       {!isLoading && !isError && (
         <DataTable
-          headers={['', 'Nombre', 'Tipo', 'Icono', 'Orden', '']}
+          headers={['', 'Nombre', 'Tipo', 'Icono', '']}
           isEmpty={categories.length === 0}
           emptyMessage="Sin categorías"
         >
@@ -144,7 +138,6 @@ export function CategoriesPage() {
               <td>{category.name}</td>
               <td>{category.movementType === 'INCOME' ? 'Ingreso' : 'Gasto'}</td>
               <td>{category.icon ?? '—'}</td>
-              <td>{category.sortOrder}</td>
               <td>
                 <div className={styles.rowActions}>
                   <Button size="small" onClick={() => openEdit(category)}>
@@ -195,15 +188,6 @@ export function CategoriesPage() {
             <EmojiPicker
               value={form.icon}
               onChange={(emoji) => setForm({ ...form, icon: emoji })}
-            />
-          </Field>
-          <Field label="Posición">
-            <Input
-              required
-              type="number"
-              min="1"
-              value={form.sortOrder}
-              onChange={(e) => setForm({ ...form, sortOrder: e.target.value })}
             />
           </Field>
         </Modal>

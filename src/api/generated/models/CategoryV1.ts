@@ -52,12 +52,6 @@ export interface CategoryV1 {
      */
     icon?: string | null;
     /**
-     * Display sort order
-     * @type {number}
-     * @memberof CategoryV1
-     */
-    sortOrder?: number;
-    /**
      * 
      * @type {MovementTypeV1}
      * @memberof CategoryV1
@@ -88,7 +82,6 @@ export function CategoryV1FromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'name': json['name'] == null ? undefined : json['name'],
         'color': json['color'] == null ? undefined : json['color'],
         'icon': json['icon'] == null ? undefined : json['icon'],
-        'sortOrder': json['sortOrder'] == null ? undefined : json['sortOrder'],
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
     };
 }
@@ -108,7 +101,6 @@ export function CategoryV1ToJSONTyped(value?: CategoryV1 | null, ignoreDiscrimin
         'name': value['name'],
         'color': value['color'],
         'icon': value['icon'],
-        'sortOrder': value['sortOrder'],
         'movementType': MovementTypeV1ToJSON(value['movementType']),
     };
 }
