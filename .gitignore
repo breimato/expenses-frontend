@@ -1,5 +1,4 @@
 ﻿node_modules/
-src/api/generated/
 dist/
 .env.deploy.local
 .env.development.local

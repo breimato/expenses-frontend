@@ -1,0 +1,69 @@
+# PostRecurringTemplatesApplyPendingV1Api
+
+All URIs are relative to *http://localhost*
+
+| Method | HTTP request | Description |
+|------------- | ------------- | -------------|
+| [**postRecurringTemplatesApplyPendingV1**](PostRecurringTemplatesApplyPendingV1Api.md#postrecurringtemplatesapplypendingv1) | **POST** /v1/expenses/recurring-templates/apply-pending | Post Recurring Templates Apply Pending V1 |
+
+
+
+## postRecurringTemplatesApplyPendingV1
+
+> PostRecurringTemplatesApplyPendingV1Response postRecurringTemplatesApplyPendingV1()
+
+Post Recurring Templates Apply Pending V1
+
+Apply all due recurring templates for the current period
+
+### Example
+
+```ts
+import {
+  Configuration,
+  PostRecurringTemplatesApplyPendingV1Api,
+} from '';
+import type { PostRecurringTemplatesApplyPendingV1Request } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new PostRecurringTemplatesApplyPendingV1Api();
+
+  try {
+    const data = await api.postRecurringTemplatesApplyPendingV1();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**PostRecurringTemplatesApplyPendingV1Response**](PostRecurringTemplatesApplyPendingV1Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | 200 OK |  -  |
+| **500** | Internal Server Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
