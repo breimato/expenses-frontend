@@ -8,6 +8,7 @@ import type {
 } from '@/api/generated';
 import { Amount } from '@/components/ui/Amount';
 import { Button } from '@/components/ui/Button';
+import { CategoryPicker } from '@/components/ui/CategoryPicker';
 import { CategoryStripe } from '@/components/ui/CategoryStripe';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable } from '@/components/ui/DataTable';
@@ -290,18 +291,12 @@ export function RecurringPage() {
             />
           </Field>
           <Field label="Categoría">
-            <Select
+            <CategoryPicker
               required
+              categories={formCategories}
               value={form.categoryId}
-              onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-            >
-              <option value="">Seleccionar…</option>
-              {formCategories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </Select>
+              onChange={(categoryId) => setForm({ ...form, categoryId })}
+            />
           </Field>
           <Field label="Frecuencia">
             <Select

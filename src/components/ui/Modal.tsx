@@ -36,8 +36,8 @@ export function Modal({
             Cerrar
           </Button>
         </div>
-        <form className={styles.form} onSubmit={onSubmit}>
-          {children}
+        <form className={styles.formShell} onSubmit={onSubmit}>
+          <div className={styles.form}>{children}</div>
           <div className={styles.actions}>
             <Button variant="ghost" onClick={onClose} type="button">
               Cancelar

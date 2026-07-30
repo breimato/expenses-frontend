@@ -3,6 +3,7 @@ import type { ExpenseV1, PatchExpenseV1Request, PostExpenseV1Request } from '@/a
 import { todayIsoDate } from '@/api/client';
 import { Amount } from '@/components/ui/Amount';
 import { Button } from '@/components/ui/Button';
+import { CategoryPicker } from '@/components/ui/CategoryPicker';
 import { CategoryStripe } from '@/components/ui/CategoryStripe';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable } from '@/components/ui/DataTable';
@@ -214,18 +215,12 @@ export function ExpensesPage() {
           isSubmitting={isSubmitting}
         >
           <Field label="Categoría">
-            <Select
+            <CategoryPicker
               required
+              categories={categories}
               value={form.categoryId}
-              onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-            >
-              <option value="">Seleccionar…</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </Select>
+              onChange={(categoryId) => setForm({ ...form, categoryId })}
+            />
           </Field>
           <Field label="Importe">
             <Input
