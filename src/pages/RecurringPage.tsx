@@ -118,7 +118,7 @@ export function RecurringPage() {
       categoryId: Number(form.categoryId),
       sortOrder: Number(form.sortOrder),
       movementType: form.movementType,
-      offsetsSpendingAverage: form.movementType === 'INCOME' ? form.offsetsSpendingAverage : false,
+      offsetsSpendingAverage: form.offsetsSpendingAverage,
       frequency: form.frequency,
       dayOfMonth: form.frequency === 'MONTHLY' ? Number(form.dayOfMonth) : undefined,
       autoApply: form.autoApply,
@@ -338,7 +338,7 @@ export function RecurringPage() {
               </Field>
             </>
           )}
-          {form.movementType === 'INCOME' && (
+          {form.movementType === 'INCOME' ? (
             <Field label="Compensa en la media de gastos">
               <label className={styles.checkboxRow}>
                 <input
@@ -347,6 +347,17 @@ export function RecurringPage() {
                   onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
                 />
                 <span>Para bizums o reembolsos de gastos que pagaste tú</span>
+              </label>
+            </Field>
+          ) : (
+            <Field label="Excluir de la media de gastos">
+              <label className={styles.checkboxRow}>
+                <input
+                  type="checkbox"
+                  checked={form.offsetsSpendingAverage}
+                  onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
+                />
+                <span>Para ahorros o inversiones que salen de la cuenta pero no son consumo</span>
               </label>
             </Field>
           )}

@@ -12,7 +12,6 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
 /**
  * Analytics Averages V1
  * @export
@@ -25,24 +24,6 @@ export interface AnalyticsAveragesV1 {
      * @memberof AnalyticsAveragesV1
      */
     dailyAverage?: string;
-    /**
-     * Weekly average expense as decimal string
-     * @type {string}
-     * @memberof AnalyticsAveragesV1
-     */
-    weeklyAverage?: string;
-    /**
-     * Monthly average expense as decimal string
-     * @type {string}
-     * @memberof AnalyticsAveragesV1
-     */
-    monthlyAverage?: string;
-    /**
-     * Yearly average expense as decimal string
-     * @type {string}
-     * @memberof AnalyticsAveragesV1
-     */
-    yearlyAverage?: string;
 }
 
 /**
@@ -61,11 +42,7 @@ export function AnalyticsAveragesV1FromJSONTyped(json: any, ignoreDiscriminator:
         return json;
     }
     return {
-        
         'dailyAverage': json['dailyAverage'] == null ? undefined : json['dailyAverage'],
-        'weeklyAverage': json['weeklyAverage'] == null ? undefined : json['weeklyAverage'],
-        'monthlyAverage': json['monthlyAverage'] == null ? undefined : json['monthlyAverage'],
-        'yearlyAverage': json['yearlyAverage'] == null ? undefined : json['yearlyAverage'],
     };
 }
 
@@ -79,11 +56,6 @@ export function AnalyticsAveragesV1ToJSONTyped(value?: AnalyticsAveragesV1 | nul
     }
 
     return {
-        
         'dailyAverage': value['dailyAverage'],
-        'weeklyAverage': value['weeklyAverage'],
-        'monthlyAverage': value['monthlyAverage'],
-        'yearlyAverage': value['yearlyAverage'],
     };
 }
-

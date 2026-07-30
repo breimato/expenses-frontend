@@ -26,6 +26,7 @@ type ExpenseFormState = {
   amount: string;
   description: string;
   expenseDate: string;
+  offsetsSpendingAverage: boolean;
 };
 
 const emptyForm = (): ExpenseFormState => ({
@@ -33,6 +34,7 @@ const emptyForm = (): ExpenseFormState => ({
   amount: '',
   description: '',
   expenseDate: todayIsoDate(),
+  offsetsSpendingAverage: false,
 });
 
 export function ExpensesPage() {
@@ -78,6 +80,7 @@ export function ExpensesPage() {
       amount: expense.amount ?? '',
       description: expense.description ?? '',
       expenseDate: toInputDate(expense.expenseDate),
+      offsetsSpendingAverage: expense.offsetsSpendingAverage ?? false,
     });
     setModalOpen(true);
   };
@@ -96,6 +99,7 @@ export function ExpensesPage() {
           amount: form.amount,
           description: form.description,
           expenseDate: toApiDate(form.expenseDate),
+          offsetsSpendingAverage: form.offsetsSpendingAverage,
         };
         await updateExpense.mutateAsync({ id: editing.id, body });
       } else {
@@ -105,6 +109,7 @@ export function ExpensesPage() {
           description: form.description,
           expenseDate: toApiDate(form.expenseDate),
           movementType: 'EXPENSE',
+          offsetsSpendingAverage: form.offsetsSpendingAverage,
         };
         await createExpense.mutateAsync(body);
       }
@@ -168,8 +173,8 @@ export function ExpensesPage() {
       {isError && <StateMessage message="Error al cargar gastos" variant="error" />}
       {!isLoading && !isError && (
         <DataTable
-          headers={['Fecha', 'Concepto', 'Categoría', 'Importe', '']}
-          alignRight={[3]}
+          headers={['Fecha', 'Concepto', 'Categoría', 'Excluye media', 'Importe', '']}
+          alignRight={[4]}
           isEmpty={expenses.length === 0}
           emptyMessage="No hay gastos con estos filtros"
         >
@@ -185,6 +190,7 @@ export function ExpensesPage() {
                     {category?.name ?? '—'}
                   </span>
                 </td>
+                <td>{expense.offsetsSpendingAverage ? 'Sí' : 'No'}</td>
                 <td style={{ textAlign: 'right' }}>
                   <Amount value={expense.amount} />
                 </td>
@@ -251,6 +257,16 @@ export function ExpensesPage() {
               value={form.expenseDate}
               onChange={(e) => setForm({ ...form, expenseDate: e.target.value })}
             />
+          </Field>
+          <Field label="Excluir de la media de gastos">
+            <label className={styles.checkboxRow}>
+              <input
+                type="checkbox"
+                checked={form.offsetsSpendingAverage}
+                onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
+              />
+              <span>Para ahorros o inversiones que salen de la cuenta pero no son consumo</span>
+            </label>
           </Field>
         </Modal>
       )}

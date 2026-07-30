@@ -17,24 +17,23 @@ export function AnalyticsStrip() {
   }
 
   const dailyAverage = averages.data?.analyticsAverages?.dailyAverage;
-  const monthlyAverage = averages.data?.analyticsAverages?.monthlyAverage;
-  const yearlyAverage = averages.data?.analyticsAverages?.yearlyAverage;
   const endBalance = projections.data?.analyticsProjections?.projectedEndOfMonthBalance;
   const daysRemaining = projections.data?.analyticsProjections?.daysRemainingInMonth;
   const balance = profile.data?.profile?.balance;
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.strip}>
+      <div className={`${styles.metric} ${styles.balance}`}>
+        <span className={styles.label}>Balance</span>
+        <span className={styles.balanceValue}>
+          <Amount value={balance} />
+        </span>
+        <span className={styles.sub}>saldo actual</span>
+      </div>
+
+      <div className={styles.row}>
         <div className={styles.metric}>
-          <span className={styles.label}>Balance</span>
-          <span className={styles.value}>
-            <Amount value={balance} />
-          </span>
-          <span className={styles.sub}>saldo actual</span>
-        </div>
-        <div className={styles.metric}>
-          <span className={styles.label}>Fin de mes (est.)</span>
+          <span className={styles.label}>Estimación de dinero a final de mes</span>
           <span className={styles.value}>
             <Amount value={endBalance} />
           </span>
@@ -48,22 +47,6 @@ export function AnalyticsStrip() {
             <Amount value={dailyAverage} />
           </span>
           <span className={styles.sub}>desde el 1 del mes</span>
-        </div>
-      </div>
-      <div className={`${styles.strip} ${styles.stripSecondary}`}>
-        <div className={styles.metric}>
-          <span className={styles.label}>Media mensual</span>
-          <span className={styles.value}>
-            <Amount value={monthlyAverage} />
-          </span>
-          <span className={styles.sub}>promedio últimos 12 meses</span>
-        </div>
-        <div className={styles.metric}>
-          <span className={styles.label}>Media anual</span>
-          <span className={styles.value}>
-            <Amount value={yearlyAverage} />
-          </span>
-          <span className={styles.sub}>promedio mensual del año en curso</span>
         </div>
       </div>
     </div>
