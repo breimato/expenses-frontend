@@ -37,9 +37,7 @@
   --space-2xl: 3rem;
 
   /* Layout */
-  --nav-rail-width: 11rem;
-  --bottom-nav-height: 3.5rem;
-  --content-max-width: 56rem;
+  --content-max-width: 960px;
 
   /* Misc */
   --radius-sm: 4px;

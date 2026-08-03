@@ -1,16 +1,17 @@
 import { NavLink } from 'react-router-dom';
-import styles from './BottomNav.module.css';
+import styles from './SectionNav.module.css';
 
 const links = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/gastos', label: 'Gastos' },
   { to: '/ingresos', label: 'Ingresos' },
-  { to: '/ajustes', label: 'Ajustes' },
+  { to: '/plantillas', label: 'Plantillas' },
+  { to: '/categorias', label: 'Categorías' },
 ] as const;
 
-export function BottomNav() {
+export function SectionNav() {
   return (
-    <nav className={styles.bottomNav} aria-label="Navegación móvil">
+    <nav className={styles.nav} aria-label="Secciones">
       {links.map((link) => (
         <NavLink
           key={link.to}

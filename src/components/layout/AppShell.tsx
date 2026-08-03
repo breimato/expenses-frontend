@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { ThemeToggle } from '@/components/features/ThemeToggle';
-import { NavRail } from './NavRail';
+import { FinanceNav } from '@/components/ui/FinanceNav';
+import { SectionNav } from './SectionNav';
 import styles from './AppShell.module.css';
 
 export function AppShell() {
@@ -10,19 +11,17 @@ export function AppShell() {
         Saltar al contenido principal
       </a>
       <header className={styles.header}>
-        <div className={styles.desktopNav}>
-          <NavRail />
-        </div>
+        <FinanceNav currentServiceId="gastos" />
         <div className={styles.actions}>
           <ThemeToggle />
         </div>
       </header>
+      <div className={styles.sectionNav}>
+        <SectionNav />
+      </div>
       <main id="main-content" className={styles.content}>
         <Outlet />
       </main>
-      <div className={styles.mobileNav}>
-        <NavRail />
-      </div>
     </div>
   );
 }
