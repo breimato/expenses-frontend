@@ -59,12 +59,6 @@ export interface RecurringTemplateV1 {
      */
     categoryId?: number;
     /**
-     * Display sort order
-     * @type {number}
-     * @memberof RecurringTemplateV1
-     */
-    sortOrder?: number;
-    /**
      * Last used timestamp
      * @type {Date}
      * @memberof RecurringTemplateV1
@@ -77,7 +71,7 @@ export interface RecurringTemplateV1 {
      */
     movementType?: MovementTypeV1;
     /**
-     * For income templates: reduces net spending in analytics averages
+     * Income templates: reduces net spending in analytics averages. Expense templates: excludes the amount from analytics averages (e.g. savings/investments).
      * @type {boolean}
      * @memberof RecurringTemplateV1
      */
@@ -131,7 +125,6 @@ export function RecurringTemplateV1FromJSONTyped(json: any, ignoreDiscriminator:
         'label': json['label'] == null ? undefined : json['label'],
         'amount': json['amount'] == null ? undefined : json['amount'],
         'categoryId': json['categoryId'] == null ? undefined : json['categoryId'],
-        'sortOrder': json['sortOrder'] == null ? undefined : json['sortOrder'],
         'lastUsedAt': json['lastUsedAt'] == null ? undefined : (new Date(json['lastUsedAt'])),
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
         'offsetsSpendingAverage': json['offsetsSpendingAverage'] == null ? undefined : json['offsetsSpendingAverage'],
@@ -157,7 +150,6 @@ export function RecurringTemplateV1ToJSONTyped(value?: RecurringTemplateV1 | nul
         'label': value['label'],
         'amount': value['amount'],
         'categoryId': value['categoryId'],
-        'sortOrder': value['sortOrder'],
         'lastUsedAt': value['lastUsedAt'] == null ? value['lastUsedAt'] : value['lastUsedAt'].toISOString(),
         'movementType': MovementTypeV1ToJSON(value['movementType']),
         'offsetsSpendingAverage': value['offsetsSpendingAverage'],

@@ -27,7 +27,11 @@ import type { PostExpenseV1OperationRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new PostExpenseV1Api();
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new PostExpenseV1Api(config);
 
   const body = {
     // PostExpenseV1Request
@@ -59,7 +63,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

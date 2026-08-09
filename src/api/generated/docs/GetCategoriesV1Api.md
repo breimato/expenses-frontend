@@ -27,7 +27,11 @@ import type { GetCategoriesV1Request } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new GetCategoriesV1Api();
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new GetCategoriesV1Api(config);
 
   const body = {
     // number (optional)
@@ -65,7 +69,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

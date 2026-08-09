@@ -27,7 +27,11 @@ import type { PatchCategoryV1OperationRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new PatchCategoryV1Api();
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new PatchCategoryV1Api(config);
 
   const body = {
     // number | Category identifier
@@ -62,7 +66,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

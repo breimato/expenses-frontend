@@ -13,6 +13,8 @@ import {
   PatchExpenseV1Api,
   PatchProfileV1Api,
   PatchRecurringTemplateV1Api,
+  PostAuthLoginV1Api,
+  PostAuthRegisterV1Api,
   PostCategoryV1Api,
   PostExpenseV1Api,
   PostRecurringTemplateV1Api,
@@ -20,11 +22,19 @@ import {
   RecurringTemplateApplicationsV1Api,
 } from '@/api/generated';
 import { fetchApi } from '@/api/fetchApi';
+import { getAccessToken } from '@/context/AuthContext';
 import { toLocalIsoDate } from '@/utils/format';
 
 const basePath = import.meta.env.VITE_API_URL ?? '';
 
-const config = new Configuration({ basePath, fetchApi });
+const config = new Configuration({
+  basePath,
+  fetchApi,
+  accessToken: async () => getAccessToken() ?? '',
+});
+
+export const postAuthRegisterApi = new PostAuthRegisterV1Api(config);
+export const postAuthLoginApi = new PostAuthLoginV1Api(config);
 
 export const getCategoriesApi = new GetCategoriesV1Api(config);
 export const postCategoryApi = new PostCategoryV1Api(config);

@@ -46,12 +46,6 @@ export interface PatchCategoryV1Request {
      */
     icon?: string | null;
     /**
-     * Display sort order
-     * @type {number}
-     * @memberof PatchCategoryV1Request
-     */
-    sortOrder?: number;
-    /**
      * 
      * @type {MovementTypeV1}
      * @memberof PatchCategoryV1Request
@@ -81,7 +75,6 @@ export function PatchCategoryV1RequestFromJSONTyped(json: any, ignoreDiscriminat
         'name': json['name'] == null ? undefined : json['name'],
         'color': json['color'] == null ? undefined : json['color'],
         'icon': json['icon'] == null ? undefined : json['icon'],
-        'sortOrder': json['sortOrder'] == null ? undefined : json['sortOrder'],
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
     };
 }
@@ -100,7 +93,6 @@ export function PatchCategoryV1RequestToJSONTyped(value?: PatchCategoryV1Request
         'name': value['name'],
         'color': value['color'],
         'icon': value['icon'],
-        'sortOrder': value['sortOrder'],
         'movementType': MovementTypeV1ToJSON(value['movementType']),
     };
 }

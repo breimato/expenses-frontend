@@ -27,7 +27,11 @@ import type { GetProfileV1Request } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new GetProfileV1Api();
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new GetProfileV1Api(config);
 
   try {
     const data = await api.getProfileV1();
@@ -51,7 +55,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

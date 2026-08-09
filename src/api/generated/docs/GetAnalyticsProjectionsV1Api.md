@@ -27,7 +27,11 @@ import type { GetAnalyticsProjectionsV1OperationRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new GetAnalyticsProjectionsV1Api();
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new GetAnalyticsProjectionsV1Api(config);
 
   const body = {
     // GetAnalyticsProjectionsV1Request
@@ -59,7 +63,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

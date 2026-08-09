@@ -11,6 +11,8 @@ apis/PatchCategoryV1Api.ts
 apis/PatchExpenseV1Api.ts
 apis/PatchProfileV1Api.ts
 apis/PatchRecurringTemplateV1Api.ts
+apis/PostAuthLoginV1Api.ts
+apis/PostAuthRegisterV1Api.ts
 apis/PostCategoryV1Api.ts
 apis/PostExpenseV1Api.ts
 apis/PostRecurringTemplateV1Api.ts
@@ -21,6 +23,8 @@ docs/AnalyticsAveragesV1.md
 docs/AnalyticsProjectionsV1.md
 docs/ApiError.md
 docs/ApiErrorV1.md
+docs/AuthUserV1.md
+docs/AuthV1Response.md
 docs/CategoryV1.md
 docs/CategoryV1Response.md
 docs/DeleteCategoryV1Api.md
@@ -50,6 +54,10 @@ docs/PatchProfileV1Api.md
 docs/PatchProfileV1Request.md
 docs/PatchRecurringTemplateV1Api.md
 docs/PatchRecurringTemplateV1Request.md
+docs/PostAuthLoginV1Api.md
+docs/PostAuthLoginV1Request.md
+docs/PostAuthRegisterV1Api.md
+docs/PostAuthRegisterV1Request.md
 docs/PostCategoryV1Api.md
 docs/PostCategoryV1Request.md
 docs/PostExpenseV1Api.md
@@ -70,6 +78,8 @@ models/AnalyticsAveragesV1.ts
 models/AnalyticsProjectionsV1.ts
 models/ApiError.ts
 models/ApiErrorV1.ts
+models/AuthUserV1.ts
+models/AuthV1Response.ts
 models/CategoryV1.ts
 models/CategoryV1Response.ts
 models/ExpenseV1.ts
@@ -86,6 +96,8 @@ models/PatchCategoryV1Request.ts
 models/PatchExpenseV1Request.ts
 models/PatchProfileV1Request.ts
 models/PatchRecurringTemplateV1Request.ts
+models/PostAuthLoginV1Request.ts
+models/PostAuthRegisterV1Request.ts
 models/PostCategoryV1Request.ts
 models/PostExpenseV1Request.ts
 models/PostRecurringTemplateQuickAddV1Request.ts

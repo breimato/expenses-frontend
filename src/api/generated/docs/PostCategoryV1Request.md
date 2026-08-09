@@ -10,7 +10,6 @@ Name | Type
 `name` | string
 `color` | string
 `icon` | string
-`sortOrder` | number
 `movementType` | [MovementTypeV1](MovementTypeV1.md)
 
 ## Example
@@ -23,7 +22,6 @@ const example = {
   "name": null,
   "color": null,
   "icon": null,
-  "sortOrder": null,
   "movementType": null,
 } satisfies PostCategoryV1Request
 

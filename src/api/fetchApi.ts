@@ -1,4 +1,5 @@
 import type { FetchAPI } from '@/api/generated';
+import { clearStoredSession } from '@/context/AuthContext';
 
 /**
  * OpenAPI defines several GET endpoints with a JSON body.
@@ -10,11 +11,20 @@ export const fetchApi: FetchAPI = async (url, init) => {
   const method = init?.method?.toUpperCase() ?? 'GET';
   const hasBody = init?.body !== undefined && init?.body !== null && init?.body !== '';
 
-  if (method === 'GET' && hasBody) {
-    return xhrGetWithBody(requestUrl, init);
+  const response =
+    method === 'GET' && hasBody
+      ? await xhrGetWithBody(requestUrl, init)
+      : await fetch(url, init);
+
+  if (response.status === 401 && !requestUrl.includes('/v1/auth/')) {
+    clearStoredSession();
+    const loginPath = `${import.meta.env.BASE_URL}login`.replace(/\/{2,}/g, '/');
+    if (!window.location.pathname.endsWith('/login')) {
+      window.location.assign(loginPath);
+    }
   }
 
-  return fetch(url, init);
+  return response;
 };
 
 function xhrGetWithBody(url: string, init: RequestInit): Promise<Response> {

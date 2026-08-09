@@ -18,7 +18,7 @@ jobs:
 
       - name: Install and build
         env:
-          VITE_BASE_PATH: /gastos/
+          VITE_BASE_PATH: /cuaderno/
           VITE_API_URL: https://expenses-backend-02uz.onrender.com
           VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
         run: |
@@ -49,4 +49,4 @@ jobs:
           port: ${{ secrets.SITEGROUND_FTP_PORT }}
           protocol: ftp
           local-dir: ./dist/
-          server-dir: breimato.es/public_html/gastos/
+          server-dir: breimato.es/public_html/cuaderno/

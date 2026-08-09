@@ -53,19 +53,13 @@ export interface PostRecurringTemplateV1Request {
      */
     categoryId: number;
     /**
-     * Display sort order
-     * @type {number}
-     * @memberof PostRecurringTemplateV1Request
-     */
-    sortOrder?: number;
-    /**
      * 
      * @type {MovementTypeV1}
      * @memberof PostRecurringTemplateV1Request
      */
     movementType?: MovementTypeV1;
     /**
-     * For income templates: reduces net spending in analytics averages
+     * Income templates: reduces net spending in analytics averages. Expense templates: excludes the amount from analytics averages (e.g. savings/investments).
      * @type {boolean}
      * @memberof PostRecurringTemplateV1Request
      */
@@ -121,7 +115,6 @@ export function PostRecurringTemplateV1RequestFromJSONTyped(json: any, ignoreDis
         'label': json['label'],
         'amount': json['amount'],
         'categoryId': json['categoryId'],
-        'sortOrder': json['sortOrder'] == null ? undefined : json['sortOrder'],
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
         'offsetsSpendingAverage': json['offsetsSpendingAverage'] == null ? undefined : json['offsetsSpendingAverage'],
         'frequency': json['frequency'] == null ? undefined : RecurringFrequencyV1FromJSON(json['frequency']),
@@ -145,7 +138,6 @@ export function PostRecurringTemplateV1RequestToJSONTyped(value?: PostRecurringT
         'label': value['label'],
         'amount': value['amount'],
         'categoryId': value['categoryId'],
-        'sortOrder': value['sortOrder'],
         'movementType': MovementTypeV1ToJSON(value['movementType']),
         'offsetsSpendingAverage': value['offsetsSpendingAverage'],
         'frequency': RecurringFrequencyV1ToJSON(value['frequency']),

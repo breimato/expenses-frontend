@@ -10,7 +10,6 @@ Name | Type
 `label` | string
 `amount` | string
 `categoryId` | number
-`sortOrder` | number
 `movementType` | [MovementTypeV1](MovementTypeV1.md)
 `offsetsSpendingAverage` | boolean
 `frequency` | [RecurringFrequencyV1](RecurringFrequencyV1.md)
@@ -28,7 +27,6 @@ const example = {
   "label": null,
   "amount": null,
   "categoryId": null,
-  "sortOrder": null,
   "movementType": null,
   "offsetsSpendingAverage": null,
   "frequency": null,

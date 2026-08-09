@@ -11,7 +11,6 @@ Name | Type
 `label` | string
 `amount` | string
 `categoryId` | number
-`sortOrder` | number
 `lastUsedAt` | Date
 `movementType` | [MovementTypeV1](MovementTypeV1.md)
 `offsetsSpendingAverage` | boolean
@@ -31,7 +30,6 @@ const example = {
   "label": null,
   "amount": null,
   "categoryId": null,
-  "sortOrder": null,
   "lastUsedAt": null,
   "movementType": null,
   "offsetsSpendingAverage": null,

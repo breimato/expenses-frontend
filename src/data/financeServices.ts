@@ -3,7 +3,7 @@ export type FinanceServiceId =
   | 'salario-neto'
   | 'hipoteca'
   | 'calculadora-intereses'
-  | 'gastos';
+  | 'cuaderno';
 
 export interface FinanceService {
   id: FinanceServiceId;
@@ -17,5 +17,5 @@ export const FINANCE_SERVICES: FinanceService[] = [
   { id: 'salario-neto', title: 'Salario neto', href: '/salario-neto/' },
   { id: 'hipoteca', title: 'Hipoteca', href: '/hipoteca/' },
   { id: 'calculadora-intereses', title: 'Interés compuesto', href: '/calculadora-intereses/' },
-  { id: 'gastos', title: 'Gastos', href: '/gastos/' },
+  { id: 'cuaderno', title: 'Cuaderno', href: '/cuaderno/' },
 ];

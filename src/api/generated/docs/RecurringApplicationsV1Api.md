@@ -27,7 +27,11 @@ import type { PostRecurringTemplatesApplyPendingV1Request } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new RecurringApplicationsV1Api();
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: bearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new RecurringApplicationsV1Api(config);
 
   try {
     const data = await api.postRecurringTemplatesApplyPendingV1();
@@ -51,7 +55,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

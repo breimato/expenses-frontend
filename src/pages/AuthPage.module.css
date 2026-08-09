@@ -1,0 +1,61 @@
+.page {
+  box-sizing: border-box;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgb(74 114 97 / 0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgb(139 105 20 / 0.12), transparent),
+    var(--color-paper);
+}
+
+.panel {
+  width: min(100%, 24rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-paper-elevated);
+  box-shadow: 0 8px 24px rgb(26 24 20 / 0.08);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.lead {
+  margin: var(--space-xs) 0 0;
+  color: var(--color-ink-muted);
+  font-size: 0.9375rem;
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: rgb(166 61 61 / 0.1);
+  color: var(--color-danger);
+  font-size: 0.875rem;
+}
+
+.footer {
+  margin: 0;
+  text-align: center;
+  color: var(--color-ink-muted);
+  font-size: 0.875rem;
+}
+
+.footer a {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}

@@ -58,7 +58,7 @@ export interface PostExpenseV1Request {
      */
     movementType?: MovementTypeV1;
     /**
-     * For incomes: reduces net spending in analytics averages
+     * Incomes: reduces net spending in analytics averages (e.g. reimbursements). Expenses: excludes the amount from analytics averages (e.g. savings/investments).
      * @type {boolean}
      * @memberof PostExpenseV1Request
      */

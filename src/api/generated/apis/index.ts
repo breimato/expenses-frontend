@@ -13,6 +13,8 @@ export * from './PatchCategoryV1Api';
 export * from './PatchExpenseV1Api';
 export * from './PatchProfileV1Api';
 export * from './PatchRecurringTemplateV1Api';
+export * from './PostAuthLoginV1Api';
+export * from './PostAuthRegisterV1Api';
 export * from './PostCategoryV1Api';
 export * from './PostExpenseV1Api';
 export * from './PostRecurringTemplateV1Api';

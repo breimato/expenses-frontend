@@ -46,12 +46,6 @@ export interface PostCategoryV1Request {
      */
     icon?: string | null;
     /**
-     * Display sort order
-     * @type {number}
-     * @memberof PostCategoryV1Request
-     */
-    sortOrder?: number;
-    /**
      * 
      * @type {MovementTypeV1}
      * @memberof PostCategoryV1Request
@@ -83,7 +77,6 @@ export function PostCategoryV1RequestFromJSONTyped(json: any, ignoreDiscriminato
         'name': json['name'],
         'color': json['color'],
         'icon': json['icon'] == null ? undefined : json['icon'],
-        'sortOrder': json['sortOrder'] == null ? undefined : json['sortOrder'],
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
     };
 }
@@ -102,7 +95,6 @@ export function PostCategoryV1RequestToJSONTyped(value?: PostCategoryV1Request |
         'name': value['name'],
         'color': value['color'],
         'icon': value['icon'],
-        'sortOrder': value['sortOrder'],
         'movementType': MovementTypeV1ToJSON(value['movementType']),
     };
 }

@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+import { mapValues } from '../runtime';
 /**
  * Analytics Averages V1
  * @export
@@ -42,6 +43,7 @@ export function AnalyticsAveragesV1FromJSONTyped(json: any, ignoreDiscriminator:
         return json;
     }
     return {
+        
         'dailyAverage': json['dailyAverage'] == null ? undefined : json['dailyAverage'],
     };
 }
@@ -56,6 +58,8 @@ export function AnalyticsAveragesV1ToJSONTyped(value?: AnalyticsAveragesV1 | nul
     }
 
     return {
+        
         'dailyAverage': value['dailyAverage'],
     };
 }
+

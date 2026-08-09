@@ -53,19 +53,13 @@ export interface PatchRecurringTemplateV1Request {
      */
     categoryId?: number;
     /**
-     * Display sort order
-     * @type {number}
-     * @memberof PatchRecurringTemplateV1Request
-     */
-    sortOrder?: number;
-    /**
      * 
      * @type {MovementTypeV1}
      * @memberof PatchRecurringTemplateV1Request
      */
     movementType?: MovementTypeV1;
     /**
-     * For income templates: reduces net spending in analytics averages
+     * Income templates: reduces net spending in analytics averages. Expense templates: excludes the amount from analytics averages (e.g. savings/investments).
      * @type {boolean}
      * @memberof PatchRecurringTemplateV1Request
      */
@@ -118,7 +112,6 @@ export function PatchRecurringTemplateV1RequestFromJSONTyped(json: any, ignoreDi
         'label': json['label'] == null ? undefined : json['label'],
         'amount': json['amount'] == null ? undefined : json['amount'],
         'categoryId': json['categoryId'] == null ? undefined : json['categoryId'],
-        'sortOrder': json['sortOrder'] == null ? undefined : json['sortOrder'],
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
         'offsetsSpendingAverage': json['offsetsSpendingAverage'] == null ? undefined : json['offsetsSpendingAverage'],
         'frequency': json['frequency'] == null ? undefined : RecurringFrequencyV1FromJSON(json['frequency']),
@@ -142,7 +135,6 @@ export function PatchRecurringTemplateV1RequestToJSONTyped(value?: PatchRecurrin
         'label': value['label'],
         'amount': value['amount'],
         'categoryId': value['categoryId'],
-        'sortOrder': value['sortOrder'],
         'movementType': MovementTypeV1ToJSON(value['movementType']),
         'offsetsSpendingAverage': value['offsetsSpendingAverage'],
         'frequency': RecurringFrequencyV1ToJSON(value['frequency']),
