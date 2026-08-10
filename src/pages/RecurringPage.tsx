@@ -353,7 +353,7 @@ export function RecurringPage() {
                   checked={form.offsetsSpendingAverage}
                   onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
                 />
-                <span>Para ahorros o inversiones que salen de la cuenta pero no son consumo</span>
+                <span>Para gastos que no quieras contar en la media de consumo diaria</span>
               </label>
             </Field>
           )}
