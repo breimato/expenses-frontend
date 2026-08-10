@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AnalyticsAveragesV1';
+export * from './AnalyticsCategorySpendItemV1';
 export * from './AnalyticsProjectionsV1';
 export * from './ApiError';
 export * from './ApiErrorV1';
@@ -12,6 +13,8 @@ export * from './ExpenseV1';
 export * from './ExpenseV1Response';
 export * from './GetAnalyticsAveragesV1Request';
 export * from './GetAnalyticsAveragesV1Response';
+export * from './GetAnalyticsCategoryBreakdownV1Response';
+export * from './GetAnalyticsCategoryBreakdownV1ResponseAnalyticsCategoryBreakdown';
 export * from './GetAnalyticsProjectionsV1Request';
 export * from './GetAnalyticsProjectionsV1Response';
 export * from './GetCategoriesV1Response';

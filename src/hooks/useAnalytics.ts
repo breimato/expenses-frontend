@@ -1,5 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAnalyticsAveragesApi, getAnalyticsProjectionsApi, todayIsoDate } from '@/api/client';
+import {
+  getAnalyticsAveragesApi,
+  getAnalyticsCategoryBreakdownApi,
+  getAnalyticsProjectionsApi,
+  todayIsoDate,
+} from '@/api/client';
 import { queryKeys } from '@/api/queryKeys';
 
 export function useAnalytics(referenceDate: string = todayIsoDate()) {
@@ -22,5 +27,13 @@ export function useAnalytics(referenceDate: string = todayIsoDate()) {
       }),
   });
 
-  return { averages, projections, referenceDate };
+  const categoryBreakdown = useQuery({
+    queryKey: [...queryKeys.analytics(referenceDate), 'category-breakdown'],
+    queryFn: () =>
+      getAnalyticsCategoryBreakdownApi.getAnalyticsCategoryBreakdownV1({
+        getAnalyticsAveragesV1Request: { referenceDate: date },
+      }),
+  });
+
+  return { averages, projections, categoryBreakdown, referenceDate };
 }

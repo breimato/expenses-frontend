@@ -1,4 +1,5 @@
 import { AnalyticsStrip } from '@/components/features/AnalyticsStrip';
+import { CategorySpendBreakdown } from '@/components/features/CategorySpendBreakdown';
 import { QuickAddBar } from '@/components/features/QuickAddBar';
 import { Amount } from '@/components/ui/Amount';
 import { CategoryStripe } from '@/components/ui/CategoryStripe';
@@ -27,6 +28,7 @@ export function HomePage() {
       </header>
 
       <AnalyticsStrip />
+      <CategorySpendBreakdown />
       <QuickAddBar />
 
       <section className={styles.latestExpensesSection}>

@@ -1,5 +1,5 @@
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { readFileSync, existsSync, unlinkSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { Client } from 'basic-ftp';
@@ -74,6 +74,11 @@ async function deployFtp(deployConfig) {
     .replace(/\\/g, '/')
     .replace(/^\/+|\/+$/g, '');
   const distPath = resolve(root, 'dist');
+  // Keep the live tunnel URL published by start-expenses-stack.ps1
+  const runtimeConfigPath = join(distPath, 'runtime-config.json');
+  if (existsSync(runtimeConfigPath)) {
+    unlinkSync(runtimeConfigPath);
+  }
 
   await ftpClient.cd('/');
   console.log(`Subiendo ${distPath} → /${remoteDir || ''}…`);
