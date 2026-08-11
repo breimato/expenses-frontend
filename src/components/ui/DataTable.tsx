@@ -17,6 +17,10 @@ interface DataTableProps {
   isEmpty?: boolean;
 }
 
+interface CellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  'data-label'?: string;
+}
+
 export function DataTable({
   headers,
   alignRight = [],
@@ -72,9 +76,9 @@ function enhanceRows(
         return cell;
       }
 
-      const cellElement = cell as ReactElement<TdHTMLAttributes<HTMLTableCellElement>>;
+      const cellElement = cell as ReactElement<CellProps>;
       const label = headers[index]?.trim();
-      return cloneElement(cellElement, {
+      const nextProps: Partial<CellProps> = {
         'data-label': label || undefined,
         className: [
           cellElement.props.className,
@@ -84,7 +88,8 @@ function enhanceRows(
         ]
           .filter(Boolean)
           .join(' '),
-      });
+      };
+      return cloneElement(cellElement, nextProps);
     });
 
     return cloneElement(rowElement, undefined, cells);
