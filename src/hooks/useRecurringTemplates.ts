@@ -14,11 +14,15 @@ import {
   postRecurringTemplatesApplyPendingApi,
 } from '@/api/client';
 import { queryKeys } from '@/api/queryKeys';
+import { useAuth } from '@/context/AuthContext';
 
 export function useRecurringTemplates(filters?: GetRecurringTemplatesV1Request) {
+  const { user } = useAuth();
+  const userId = user?.id;
   return useQuery({
-    queryKey: queryKeys.recurringTemplates(filters),
+    queryKey: queryKeys.recurringTemplates(userId ?? 0, filters),
     queryFn: () => getRecurringTemplatesApi.getRecurringTemplatesV1(filters ?? {}),
+    enabled: Boolean(userId),
   });
 }
 
@@ -66,7 +70,7 @@ export function useQuickAddRecurringTemplate() {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['recurringTemplates'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 }
@@ -79,7 +83,7 @@ export function useApplyPendingRecurringTemplates() {
       queryClient.invalidateQueries({ queryKey: ['recurringTemplates'] });
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 }

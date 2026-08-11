@@ -1,23 +1,14 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import { initApiClient } from '@/api/client';
+import { queryClient } from '@/api/queryClient';
 import { loadRuntimeConfig } from '@/api/runtimeConfig';
-import { AuthQueryCacheReset } from '@/components/auth/AuthQueryCacheReset';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import '@/styles/global.css';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 30_000,
-      retry: 1,
-    },
-  },
-});
 
 async function bootstrap() {
   await loadRuntimeConfig();
@@ -29,7 +20,6 @@ async function bootstrap() {
         <QueryClientProvider client={queryClient}>
           <BrowserRouter basename={import.meta.env.BASE_URL}>
             <AuthProvider>
-              <AuthQueryCacheReset />
               <App />
             </AuthProvider>
           </BrowserRouter>

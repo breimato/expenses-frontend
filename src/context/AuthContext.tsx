@@ -1,4 +1,5 @@
 import type { AuthUserV1, AuthV1Response } from '@/api/generated';
+import { queryClient } from '@/api/queryClient';
 import {
   createContext,
   useCallback,
@@ -51,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUserV1 | null>(() => readStoredUser());
 
   const setSession = useCallback((authV1Response: AuthV1Response) => {
+    queryClient.clear();
     localStorage.setItem(TOKEN_KEY, authV1Response.accessToken);
     localStorage.setItem(USER_KEY, JSON.stringify(authV1Response.user));
     setAccessToken(authV1Response.accessToken);
@@ -58,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearSession = useCallback(() => {
+    queryClient.clear();
     clearStoredSession();
     setAccessToken(null);
     setUser(null);

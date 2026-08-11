@@ -8,11 +8,15 @@ import {
   postExpenseApi,
 } from '@/api/client';
 import { queryKeys } from '@/api/queryKeys';
+import { useAuth } from '@/context/AuthContext';
 
 export function useExpenses(filters?: GetExpensesV1Request) {
+  const { user } = useAuth();
+  const userId = user?.id;
   return useQuery({
-    queryKey: queryKeys.expenses(filters),
+    queryKey: queryKeys.expenses(userId ?? 0, filters),
     queryFn: () => getExpensesApi.getExpensesV1(filters ?? {}),
+    enabled: Boolean(userId),
   });
 }
 
@@ -23,7 +27,7 @@ export function useCreateExpense() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 }
@@ -36,7 +40,7 @@ export function useUpdateExpense() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 }
@@ -48,7 +52,7 @@ export function useDeleteExpense() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 }

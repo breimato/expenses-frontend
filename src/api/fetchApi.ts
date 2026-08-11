@@ -1,4 +1,5 @@
 import type { FetchAPI } from '@/api/generated';
+import { queryClient } from '@/api/queryClient';
 import { clearStoredSession } from '@/context/AuthContext';
 
 /**
@@ -17,6 +18,7 @@ export const fetchApi: FetchAPI = async (url, init) => {
       : await fetch(url, init);
 
   if (response.status === 401 && !requestUrl.includes('/v1/auth/')) {
+    queryClient.clear();
     clearStoredSession();
     const loginPath = `${import.meta.env.BASE_URL}login`.replace(/\/{2,}/g, '/');
     if (!window.location.pathname.endsWith('/login')) {

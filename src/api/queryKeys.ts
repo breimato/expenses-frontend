@@ -1,7 +1,8 @@
 export const queryKeys = {
-  categories: ['categories'] as const,
-  expenses: (filters?: object) => ['expenses', filters] as const,
-  recurringTemplates: (filters?: object) => ['recurringTemplates', filters] as const,
-  profile: ['profile'] as const,
-  analytics: (date: string) => ['analytics', date] as const,
+  categories: (userId: number) => ['categories', userId] as const,
+  expenses: (userId: number, filters?: object) => ['expenses', userId, filters] as const,
+  recurringTemplates: (userId: number, filters?: object) =>
+    ['recurringTemplates', userId, filters] as const,
+  profile: (userId: number) => ['profile', userId] as const,
+  analytics: (userId: number, date: string) => ['analytics', userId, date] as const,
 };
