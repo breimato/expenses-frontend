@@ -136,7 +136,7 @@ export function ExpensesPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
+      <div className={styles.headerPrimary}>
         <div>
           <h1>Gastos</h1>
           <p className={styles.lead}>Registro y consulta</p>
@@ -175,6 +175,7 @@ export function ExpensesPage() {
         <DataTable
           headers={['Fecha', 'Concepto', 'Categoría', 'Excluye media', 'Importe', '']}
           alignRight={[4]}
+          hideOnMobile={[3]}
           isEmpty={expenses.length === 0}
           emptyMessage="No hay gastos con estos filtros"
         >
@@ -236,9 +237,11 @@ export function ExpensesPage() {
           <Field label="Importe">
             <Input
               required
-              type="number"
-              step="0.01"
-              min="0"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              enterKeyHint="next"
+              placeholder="0.00"
               value={form.amount}
               onChange={(e) => setForm({ ...form, amount: e.target.value })}
             />

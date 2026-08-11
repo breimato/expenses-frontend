@@ -28,7 +28,7 @@ export function UserSession() {
 
   return (
     <div className={styles.session} aria-label="Sesión">
-      <span className={styles.avatar} aria-hidden="true">
+      <span className={styles.avatar} aria-hidden="true" title={user.displayName}>
         {initialsFromName(user.displayName)}
       </span>
       <div className={styles.meta}>
@@ -39,6 +39,14 @@ export function UserSession() {
           Cerrar sesión
         </button>
       </div>
+      <button
+        type="button"
+        className={styles.logoutCompact}
+        onClick={onLogout}
+        aria-label={`Cerrar sesión (${user.displayName})`}
+      >
+        Salir
+      </button>
     </div>
   );
 }

@@ -22,14 +22,14 @@ export function HomePage() {
 
   return (
     <div className={styles.page}>
-      <header>
+      <header className={styles.homeIntro}>
         <h1>Hola{profile.data?.profile?.displayName ? `, ${profile.data.profile.displayName}` : ''}</h1>
         <p className={styles.lead}>Tu cuaderno de gastos de hoy</p>
       </header>
 
+      <QuickAddBar />
       <AnalyticsStrip />
       <CategorySpendBreakdown />
-      <QuickAddBar />
 
       <section className={styles.latestExpensesSection}>
         <div className={styles.header}>
@@ -56,7 +56,7 @@ export function HomePage() {
                       {category?.name ?? '—'}
                     </span>
                   </td>
-                  <td style={{ textAlign: 'right' }}>
+                  <td>
                     <Amount value={expense.amount} />
                   </td>
                 </tr>

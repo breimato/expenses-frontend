@@ -38,6 +38,12 @@
 
   /* Layout */
   --content-max-width: 960px;
+  --bottom-nav-height: 4rem;
+  --touch-min: 2.75rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 
   /* Misc */
   --radius-sm: 4px;

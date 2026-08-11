@@ -4,15 +4,17 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 960px;
+  max-width: var(--content-max-width);
   margin-inline: auto;
-  padding: var(--space-md) var(--space-md) var(--space-2xl);
+  padding: calc(var(--space-md) + var(--safe-top)) max(var(--space-md), var(--safe-right))
+    calc(var(--bottom-nav-height) + var(--safe-bottom) + var(--space-xl))
+    max(var(--space-md), var(--safe-left));
 }
 
 .skipLink {
   position: absolute;
-  top: var(--space-md);
-  left: var(--space-md);
+  top: calc(var(--space-md) + var(--safe-top));
+  left: max(var(--space-md), var(--safe-left));
   z-index: 1000;
   padding: var(--space-sm) var(--space-md);
   font-size: 0.875rem;
@@ -30,24 +32,25 @@
 
 .header {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   width: 100%;
-  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-md);
 }
 
 .toolbar {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  gap: var(--space-xs);
   margin-left: auto;
 }
 
 .sectionNav {
+  display: none;
   width: 100%;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -60,5 +63,17 @@
 @media (min-width: 768px) {
   .shell {
     padding: var(--space-lg) var(--space-md) var(--space-2xl);
+  }
+
+  .header {
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+  }
+
+  .sectionNav {
+    display: block;
+    margin-bottom: var(--space-xl);
   }
 }

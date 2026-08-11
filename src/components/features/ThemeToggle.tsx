@@ -21,7 +21,7 @@ export function ThemeToggle() {
       <span className={styles.icon} aria-hidden="true">
         {isDark ? '☀' : '☾'}
       </span>
-      <span>{isDark ? 'Tema claro' : 'Tema oscuro'}</span>
+      <span className={styles.label}>{isDark ? 'Tema claro' : 'Tema oscuro'}</span>
     </button>
   );
 }

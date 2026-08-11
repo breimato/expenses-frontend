@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { ThemeToggle } from '@/components/features/ThemeToggle';
 import { FinanceNav } from '@/components/ui/FinanceNav';
+import { BottomNav } from './BottomNav';
 import { UserSession } from './UserSession';
 import { SectionNav } from './SectionNav';
 import styles from './AppShell.module.css';
@@ -24,6 +25,7 @@ export function AppShell() {
       <main id="main-content" className={styles.content}>
         <Outlet />
       </main>
+      <BottomNav />
     </div>
   );
 }

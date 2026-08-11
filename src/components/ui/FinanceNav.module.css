@@ -1,13 +1,25 @@
 .nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-sm);
   align-items: center;
   flex: 1;
   min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
 }
 
 .link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -29,4 +41,17 @@
   color: var(--color-on-accent);
   background: var(--color-accent);
   border-color: var(--color-accent);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    flex: 1;
+    flex-wrap: wrap;
+    width: auto;
+    overflow: visible;
+  }
+
+  .link {
+    min-height: 0;
+  }
 }

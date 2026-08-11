@@ -112,7 +112,7 @@ export function CategoriesPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
+      <div className={styles.headerPrimary}>
         <div>
           <h1>Categorías</h1>
           <p className={styles.lead}>Organiza gastos e ingresos</p>
@@ -126,7 +126,8 @@ export function CategoriesPage() {
       {isError && <StateMessage message="Error al cargar categorías" variant="error" />}
       {!isLoading && !isError && (
         <DataTable
-          headers={['', 'Nombre', 'Tipo', 'Icono', '']}
+          headers={['Color', 'Nombre', 'Tipo', 'Icono', '']}
+          hideOnMobile={[3]}
           isEmpty={categories.length === 0}
           emptyMessage="Sin categorías"
         >

@@ -137,7 +137,7 @@ export function IncomesPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
+      <div className={styles.headerPrimary}>
         <div>
           <h1>Ingresos</h1>
           <p className={styles.lead}>Salario, reembolsos y otros ingresos</p>
@@ -176,6 +176,7 @@ export function IncomesPage() {
         <DataTable
           headers={['Fecha', 'Concepto', 'Categoría', 'Compensa media', 'Importe', '']}
           alignRight={[4]}
+          hideOnMobile={[3]}
           isEmpty={incomes.length === 0}
           emptyMessage="No hay ingresos con estos filtros"
         >
@@ -237,9 +238,11 @@ export function IncomesPage() {
           <Field label="Importe">
             <Input
               required
-              type="number"
-              step="0.01"
-              min="0"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              enterKeyHint="next"
+              placeholder="0.00"
               value={form.amount}
               onChange={(e) => setForm({ ...form, amount: e.target.value })}
             />

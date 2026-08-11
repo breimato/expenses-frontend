@@ -164,7 +164,7 @@ export function RecurringPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
+      <div className={styles.headerPrimary}>
         <div>
           <h1>Plantillas</h1>
           <p className={styles.lead}>Gastos e ingresos recurrentes</p>
@@ -191,6 +191,7 @@ export function RecurringPage() {
         <DataTable
           headers={['Nombre', 'Tipo', 'Categoría', 'Importe', 'Programación', 'Último uso', '']}
           alignRight={[3]}
+          hideOnMobile={[1, 5]}
           isEmpty={templates.length === 0}
           emptyMessage="Sin plantillas todavía"
         >
@@ -278,9 +279,10 @@ export function RecurringPage() {
           <Field label="Importe">
             <Input
               required
-              type="number"
-              step="0.01"
-              min="0"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              placeholder="0.00"
               value={form.amount}
               onChange={(e) => setForm({ ...form, amount: e.target.value })}
             />

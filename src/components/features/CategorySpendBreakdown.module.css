@@ -42,6 +42,7 @@
 
 .toggleBtn,
 .toggleActive {
+  min-height: var(--touch-min);
   padding: 0.45rem 0.85rem;
   font-size: 0.8125rem;
   font-weight: 600;
