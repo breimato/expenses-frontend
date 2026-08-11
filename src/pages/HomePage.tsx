@@ -22,16 +22,22 @@ export function HomePage() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.homeIntro}>
+      <header className={`${styles.homeIntro} ${styles.homeIntroOrder}`}>
         <h1>Hola{profile.data?.profile?.displayName ? `, ${profile.data.profile.displayName}` : ''}</h1>
         <p className={styles.lead}>Tu cuaderno de gastos de hoy</p>
       </header>
 
-      <QuickAddBar />
-      <AnalyticsStrip />
-      <CategorySpendBreakdown />
+      <div className={styles.homeAnalyticsOrder}>
+        <AnalyticsStrip />
+      </div>
+      <div className={styles.homeBreakdownOrder}>
+        <CategorySpendBreakdown />
+      </div>
+      <div className={styles.homeQuickAddOrder}>
+        <QuickAddBar />
+      </div>
 
-      <section className={styles.latestExpensesSection}>
+      <section className={`${styles.latestExpensesSection} ${styles.homeLatestOrder}`}>
         <div className={styles.header}>
           <h2>Últimos gastos</h2>
         </div>
