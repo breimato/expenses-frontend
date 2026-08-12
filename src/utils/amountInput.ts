@@ -73,3 +73,26 @@ export function appendAmountOperator(value: string, operator: '+' | '-'): string
   }
   return `${trimmed}${operator}`;
 }
+
+export function appendAmountKey(value: string, key: string): string {
+  if (key === 'backspace') {
+    return value.slice(0, -1);
+  }
+  if (key === 'equals') {
+    return evaluateAmountExpression(value);
+  }
+  if (key === ',' || key === '.') {
+    const lastSegment = value.split(/(?=[+\-])/).pop() ?? '';
+    if (/[.,]/.test(lastSegment)) {
+      return value;
+    }
+    return `${value},`;
+  }
+  if (/^\d$/.test(key)) {
+    return `${value}${key}`;
+  }
+  if (key === '+' || key === '-') {
+    return appendAmountOperator(value, key);
+  }
+  return value;
+}

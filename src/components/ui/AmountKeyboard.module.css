@@ -1,0 +1,85 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgb(0 0 0 / 0.15);
+}
+
+.keyboard {
+  padding: var(--space-sm);
+  padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+  background: #d8dce3;
+  border-top: 1px solid rgb(0 0 0 / 0.08);
+}
+
+[data-theme='dark'] .keyboard {
+  background: #2a2a2e;
+  border-top-color: rgb(255 255 255 / 0.08);
+}
+
+.pad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.key,
+.keyOperator,
+.keyWide,
+.keyDone {
+  min-height: 3rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #fefefe;
+  color: #1a1814;
+  font-size: 1.375rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.12);
+  cursor: pointer;
+}
+
+[data-theme='dark'] .key,
+[data-theme='dark'] .keyWide {
+  background: #4a4a50;
+  color: #f5f3ef;
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.35);
+}
+
+.keyOperator {
+  background: #eceef2;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .keyOperator {
+  background: #3a3a40;
+}
+
+.key:active,
+.keyOperator:active,
+.keyWide:active,
+.keyDone:active {
+  filter: brightness(0.95);
+}
+
+.keyWide {
+  grid-column: span 2;
+}
+
+.keyDone {
+  grid-column: span 4;
+  min-height: 2.75rem;
+  margin-top: 0.25rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.keyDone:active {
+  filter: brightness(0.92);
+}

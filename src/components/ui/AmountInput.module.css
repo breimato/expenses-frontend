@@ -15,7 +15,7 @@
   min-width: 0;
   min-height: var(--touch-min);
   padding: 0.75rem 1rem;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-variant-numeric: tabular-nums;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -28,8 +28,7 @@
   border-color: var(--color-input-hover-border);
 }
 
-.input:focus-visible {
-  outline: none;
+.inputFocused {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgb(45 74 62 / 0.12);
 }
@@ -47,7 +46,6 @@
   background: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
-  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .stepButton:hover {
@@ -55,21 +53,15 @@
   background: var(--color-paper);
 }
 
-.stepButton:focus-visible {
-  outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgb(45 74 62 / 0.12);
+.operatorRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .hint {
   font-size: 0.75rem;
   color: var(--color-text-muted);
-}
-
-.operatorRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
 }
 
 .operatorButton {
@@ -83,8 +75,4 @@
   background: var(--color-paper-elevated);
   color: var(--color-text);
   cursor: pointer;
-}
-
-.operatorButton:hover {
-  border-color: var(--color-accent);
 }
