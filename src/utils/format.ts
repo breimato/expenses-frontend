@@ -16,25 +16,7 @@ function parseLocalIsoDate(isoDate: string): Date {
 }
 
 export function toApiAmount(value: string): string {
-  const trimmed = value.trim();
-  if (!trimmed) {
-    return trimmed;
-  }
-
-  if (trimmed.includes(',') && !trimmed.includes('.')) {
-    return trimmed.replace(',', '.');
-  }
-
-  if (trimmed.includes(',') && trimmed.includes('.')) {
-    const lastComma = trimmed.lastIndexOf(',');
-    const lastDot = trimmed.lastIndexOf('.');
-    if (lastComma > lastDot) {
-      return trimmed.replace(/\./g, '').replace(',', '.');
-    }
-    return trimmed.replace(/,/g, '');
-  }
-
-  return trimmed;
+  return value.trim().replace(',', '.');
 }
 
 export function formatAmount(value: string | number | undefined | null): string {
