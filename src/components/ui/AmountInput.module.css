@@ -1,0 +1,90 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-xs);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--touch-min);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input:hover {
+  border-color: var(--color-input-hover-border);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgb(45 74 62 / 0.12);
+}
+
+.stepButton {
+  flex-shrink: 0;
+  width: var(--touch-min);
+  min-height: var(--touch-min);
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.stepButton:hover {
+  border-color: var(--color-accent);
+  background: var(--color-paper);
+}
+
+.stepButton:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgb(45 74 62 / 0.12);
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.operatorRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.operatorButton {
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-paper-elevated);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.operatorButton:hover {
+  border-color: var(--color-accent);
+}

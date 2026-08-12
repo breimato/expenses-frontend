@@ -15,8 +15,10 @@ function parseLocalIsoDate(isoDate: string): Date {
   return new Date(year, month - 1, day);
 }
 
+import { evaluateAmountExpression } from './amountInput';
+
 export function toApiAmount(value: string): string {
-  return value.trim().replace(',', '.');
+  return evaluateAmountExpression(value).replace(',', '.');
 }
 
 export function formatAmount(value: string | number | undefined | null): string {
