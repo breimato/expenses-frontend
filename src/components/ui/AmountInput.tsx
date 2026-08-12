@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes, useEffect, useRef, useState } from 'react';
+import { type FocusEvent, type InputHTMLAttributes, useEffect, useState } from 'react';
 import {
   appendAmountOperator,
   evaluateAmountExpression,
@@ -13,17 +13,27 @@ type AmountInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'in
   onChange: (value: string) => void;
 };
 
+function detectTouchDevice(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches ||
+    navigator.maxTouchPoints > 0
+  );
+}
+
 function useTouchDevice(): boolean {
-  const [touchDevice, setTouchDevice] = useState(false);
+  const [touchDevice, setTouchDevice] = useState(detectTouchDevice);
 
   useEffect(() => {
-    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-    const noHover = window.matchMedia('(hover: none)').matches;
-    setTouchDevice(coarsePointer || noHover);
+    const update = () => setTouchDevice(detectTouchDevice());
+    update();
 
     const coarseQuery = window.matchMedia('(pointer: coarse)');
     const hoverQuery = window.matchMedia('(hover: none)');
-    const update = () => setTouchDevice(coarseQuery.matches || hoverQuery.matches);
     coarseQuery.addEventListener('change', update);
     hoverQuery.addEventListener('change', update);
     return () => {
@@ -40,62 +50,69 @@ export function AmountInput({
   value,
   onChange,
   placeholder = '0',
+  required,
   onBlur,
   onFocus,
   onKeyDown,
   ...props
 }: AmountInputProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState(false);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const touchDevice = useTouchDevice();
 
   const handleStep = (direction: 1 | -1) => {
     onChange(stepAmount(value, direction));
-    inputRef.current?.focus();
   };
 
   const handleOperator = (operator: '+' | '-') => {
     onChange(appendAmountOperator(value, operator));
-    inputRef.current?.focus();
   };
 
   const openKeyboard = () => {
     setFocused(true);
     setKeyboardOpen(true);
-    inputRef.current?.focus();
+    onFocus?.({} as FocusEvent<HTMLInputElement>);
   };
 
   const closeKeyboard = () => {
     setKeyboardOpen(false);
     setFocused(false);
     onChange(evaluateAmountExpression(value));
-    inputRef.current?.blur();
+    onBlur?.({} as FocusEvent<HTMLInputElement>);
   };
 
   if (touchDevice) {
     return (
       <>
         <div className={styles.wrapper}>
-          <input
-            ref={inputRef}
-            type="text"
-            readOnly
-            inputMode="none"
-            enterKeyHint="done"
-            autoComplete="off"
-            placeholder={placeholder}
+          <button
+            type="button"
             aria-label="Importe"
-            className={[styles.input, focused && styles.inputFocused, className].filter(Boolean).join(' ')}
-            value={value}
-            onFocus={(event) => {
-              setFocused(true);
-              setKeyboardOpen(true);
-              onFocus?.(event);
-            }}
+            aria-required={required || undefined}
+            className={[
+              styles.input,
+              styles.inputButton,
+              focused && styles.inputFocused,
+              !value && styles.inputPlaceholder,
+              className,
+            ]
+              .filter(Boolean)
+              .join(' ')}
             onClick={openKeyboard}
-            {...props}
-          />
+          >
+            {value || placeholder}
+          </button>
+          {required && (
+            <input
+              tabIndex={-1}
+              aria-hidden="true"
+              className={styles.validator}
+              value={value}
+              required
+              readOnly
+              onFocus={(event) => event.target.blur()}
+            />
+          )}
         </div>
         <AmountKeyboard
           open={keyboardOpen}
@@ -123,12 +140,12 @@ export function AmountInput({
           </button>
         )}
         <input
-          ref={inputRef}
           type="text"
           inputMode="decimal"
           enterKeyHint="next"
           autoComplete="off"
           placeholder={placeholder}
+          required={required}
           className={[styles.input, className].filter(Boolean).join(' ')}
           value={value}
           onChange={(event) => onChange(sanitizeAmountTyping(event.target.value))}

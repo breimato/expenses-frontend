@@ -40,6 +40,9 @@
   font-variant-numeric: tabular-nums;
   box-shadow: 0 1px 0 rgb(0 0 0 / 0.12);
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 [data-theme='dark'] .key,
