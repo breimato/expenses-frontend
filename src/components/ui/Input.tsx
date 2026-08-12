@@ -10,10 +10,10 @@ interface FieldProps {
 
 export function Field({ label, children }: FieldProps) {
   return (
-    <label className={styles.field}>
+    <div className={styles.field}>
       <span className={styles.label}>{label}</span>
       {children}
-    </label>
+    </div>
   );
 }
 

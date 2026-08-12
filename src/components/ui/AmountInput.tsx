@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes, type PointerEvent, useEffect, useRef, useState } from 'react';
+import { type FocusEvent, type InputHTMLAttributes, useEffect, useRef, useState } from 'react';
 import {
   appendAmountOperator,
   evaluateAmountExpression,
@@ -51,6 +51,7 @@ export function AmountInput({
   onFocus,
   ...props
 }: AmountInputProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState(false);
   const mobileUi = useMobileUi();
@@ -60,62 +61,60 @@ export function AmountInput({
     inputRef.current?.focus();
   };
 
-  const handleOperatorPointerDown = (operator: '+' | '-') => (event: PointerEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    handleOperator(operator);
+  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
+    const nextTarget = event.relatedTarget as Node | null;
+    if (nextTarget && wrapperRef.current?.contains(nextTarget)) {
+      return;
+    }
+    setFocused(false);
+    onChange(evaluateAmountExpression(value));
+    onBlur?.(event);
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.row}>
-        <input
-          ref={inputRef}
-          type="text"
-          inputMode="decimal"
-          enterKeyHint="done"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck={false}
-          placeholder={placeholder}
-          required={required}
-          className={[styles.input, focused && styles.inputFocused, className].filter(Boolean).join(' ')}
-          value={value}
-          onChange={(event) => onChange(sanitizeAmountTyping(event.target.value))}
-          onFocus={(event) => {
-            setFocused(true);
-            onFocus?.(event);
-          }}
-          onBlur={(event) => {
-            setFocused(false);
-            onChange(evaluateAmountExpression(value));
-            onBlur?.(event);
-          }}
-          {...props}
-        />
-        {mobileUi && (
-          <>
-            <button
-              type="button"
-              className={styles.operatorButton}
-              aria-label="Sumar"
-              onPointerDown={handleOperatorPointerDown('+')}
-            >
-              +
-            </button>
-            <button
-              type="button"
-              className={styles.operatorButton}
-              aria-label="Restar"
-              onPointerDown={handleOperatorPointerDown('-')}
-            >
-              −
-            </button>
-          </>
-        )}
-      </div>
-      {mobileUi && focused && (
-        <p className={styles.hint}>Usa el teclado numérico para dígitos y estos botones para sumar o restar.</p>
+    <div ref={wrapperRef} className={styles.wrapper}>
+      <input
+        ref={inputRef}
+        type="text"
+        inputMode="decimal"
+        enterKeyHint="done"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        placeholder={placeholder}
+        required={required}
+        className={[styles.input, focused && styles.inputFocused, className].filter(Boolean).join(' ')}
+        value={value}
+        onChange={(event) => onChange(sanitizeAmountTyping(event.target.value))}
+        onFocus={(event) => {
+          setFocused(true);
+          onFocus?.(event);
+        }}
+        onBlur={handleBlur}
+        {...props}
+      />
+      {mobileUi && (
+        <div className={styles.operatorRow}>
+          <button
+            type="button"
+            className={styles.operatorButton}
+            aria-label="Añadir suma"
+            onPointerDown={(event) => event.preventDefault()}
+            onClick={() => handleOperator('+')}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            className={styles.operatorButton}
+            aria-label="Añadir resta"
+            onPointerDown={(event) => event.preventDefault()}
+            onClick={() => handleOperator('-')}
+          >
+            −
+          </button>
+        </div>
       )}
     </div>
   );
