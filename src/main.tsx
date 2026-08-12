@@ -6,11 +6,13 @@ import { App } from './App';
 import { initApiClient } from '@/api/client';
 import { queryClient } from '@/api/queryClient';
 import { loadRuntimeConfig } from '@/api/runtimeConfig';
+import { ensureFreshBuild } from '@/utils/ensureFreshBuild';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import '@/styles/global.css';
 
 async function bootstrap() {
+  ensureFreshBuild();
   await loadRuntimeConfig();
   initApiClient();
 

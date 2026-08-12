@@ -12,7 +12,7 @@ import { CategoryStripe } from '@/components/ui/CategoryStripe';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable } from '@/components/ui/DataTable';
 import { ErrorDialog } from '@/components/ui/ErrorDialog';
-import { Field, Input, Select } from '@/components/ui/Input';
+import { AmountInput, Field, Input, Select } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { useCategories } from '@/hooks/useCategories';
@@ -25,7 +25,7 @@ import {
   useRecurringTemplates,
   useUpdateRecurringTemplate,
 } from '@/hooks/useRecurringTemplates';
-import { formatDate } from '@/utils/format';
+import { formatDate, toApiAmount } from '@/utils/format';
 import styles from './Page.module.css';
 
 type TemplateFormState = {
@@ -111,7 +111,7 @@ export function RecurringPage() {
     event.preventDefault();
     const base = {
       label: form.label,
-      amount: form.amount,
+      amount: toApiAmount(form.amount),
       categoryId: Number(form.categoryId),
       movementType: form.movementType,
       offsetsSpendingAverage: form.offsetsSpendingAverage,
@@ -277,14 +277,10 @@ export function RecurringPage() {
             </Select>
           </Field>
           <Field label="Importe">
-            <Input
+            <AmountInput
               required
-              type="text"
-              inputMode="decimal"
-              autoComplete="off"
-              placeholder="0.00"
               value={form.amount}
-              onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              onChange={(amount) => setForm({ ...form, amount })}
             />
           </Field>
           <Field label="Categoría">

@@ -7,7 +7,7 @@ import { CategoryStripe } from '@/components/ui/CategoryStripe';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable } from '@/components/ui/DataTable';
 import { ErrorDialog } from '@/components/ui/ErrorDialog';
-import { Field, Input, Select } from '@/components/ui/Input';
+import { AmountInput, Field, Input, Select } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { useCategories } from '@/hooks/useCategories';
@@ -18,7 +18,7 @@ import {
   useExpenses,
   useUpdateExpense,
 } from '@/hooks/useExpenses';
-import { formatDate, toApiDate, toInputDate } from '@/utils/format';
+import { formatDate, toApiAmount, toApiDate, toInputDate } from '@/utils/format';
 import styles from './Page.module.css';
 
 type ExpenseFormState = {
@@ -96,7 +96,7 @@ export function ExpensesPage() {
       if (editing?.id) {
         const body: PatchExpenseV1Request = {
           categoryId: Number(form.categoryId),
-          amount: form.amount,
+          amount: toApiAmount(form.amount),
           description: form.description,
           expenseDate: toApiDate(form.expenseDate),
           offsetsSpendingAverage: form.offsetsSpendingAverage,
@@ -105,7 +105,7 @@ export function ExpensesPage() {
       } else {
         const body: PostExpenseV1Request = {
           categoryId: Number(form.categoryId),
-          amount: form.amount,
+          amount: toApiAmount(form.amount),
           description: form.description,
           expenseDate: toApiDate(form.expenseDate),
           movementType: 'EXPENSE',
@@ -235,15 +235,10 @@ export function ExpensesPage() {
             </Select>
           </Field>
           <Field label="Importe">
-            <Input
+            <AmountInput
               required
-              type="text"
-              inputMode="decimal"
-              autoComplete="off"
-              enterKeyHint="next"
-              placeholder="0.00"
               value={form.amount}
-              onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              onChange={(amount) => setForm({ ...form, amount })}
             />
           </Field>
           <Field label="Descripción">
