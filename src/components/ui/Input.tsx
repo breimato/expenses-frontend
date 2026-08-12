@@ -19,6 +19,27 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
   return <input className={[styles.input, className].filter(Boolean).join(' ')} {...props} />;
 }
 
+type AmountInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'inputMode' | 'value' | 'onChange'> & {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+export function AmountInput({ className, value, onChange, placeholder = '0,00', ...props }: AmountInputProps) {
+  return (
+    <Input
+      type="text"
+      inputMode="decimal"
+      autoComplete="off"
+      enterKeyHint="next"
+      placeholder={placeholder}
+      className={className}
+      value={value}
+      onChange={(event) => onChange(event.target.value.replace(/[^\d.,]/g, ''))}
+      {...props}
+    />
+  );
+}
+
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select className={[styles.select, className].filter(Boolean).join(' ')} {...props}>
