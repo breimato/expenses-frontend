@@ -1,11 +1,10 @@
-import { type FocusEvent, type InputHTMLAttributes, useEffect, useState } from 'react';
+import { type InputHTMLAttributes, useEffect, useRef, useState } from 'react';
 import {
   appendAmountOperator,
   evaluateAmountExpression,
   sanitizeAmountTyping,
-  stepAmount,
 } from '@/utils/amountInput';
-import { AmountKeyboard } from './AmountKeyboard';
+import { AmountInputAccessory } from './AmountInputAccessory';
 import styles from './AmountInput.module.css';
 
 type AmountInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'inputMode' | 'value' | 'onChange'> & {
@@ -13,7 +12,7 @@ type AmountInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'in
   onChange: (value: string) => void;
 };
 
-function detectTouchDevice(): boolean {
+function detectMobileUi(): boolean {
   if (typeof window === 'undefined') {
     return false;
   }
@@ -21,28 +20,26 @@ function detectTouchDevice(): boolean {
   return (
     window.matchMedia('(pointer: coarse)').matches ||
     window.matchMedia('(hover: none)').matches ||
-    navigator.maxTouchPoints > 0
+    navigator.maxTouchPoints > 0 ||
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
   );
 }
 
-function useTouchDevice(): boolean {
-  const [touchDevice, setTouchDevice] = useState(detectTouchDevice);
+function useMobileUi(): boolean {
+  const [mobileUi, setMobileUi] = useState(detectMobileUi);
 
   useEffect(() => {
-    const update = () => setTouchDevice(detectTouchDevice());
+    const update = () => setMobileUi(detectMobileUi());
     update();
-
-    const coarseQuery = window.matchMedia('(pointer: coarse)');
-    const hoverQuery = window.matchMedia('(hover: none)');
-    coarseQuery.addEventListener('change', update);
-    hoverQuery.addEventListener('change', update);
+    window.matchMedia('(pointer: coarse)').addEventListener('change', update);
+    window.matchMedia('(hover: none)').addEventListener('change', update);
     return () => {
-      coarseQuery.removeEventListener('change', update);
-      hoverQuery.removeEventListener('change', update);
+      window.matchMedia('(pointer: coarse)').removeEventListener('change', update);
+      window.matchMedia('(hover: none)').removeEventListener('change', update);
     };
   }, []);
 
-  return touchDevice;
+  return mobileUi;
 }
 
 export function AmountInput({
@@ -53,100 +50,32 @@ export function AmountInput({
   required,
   onBlur,
   onFocus,
-  onKeyDown,
   ...props
 }: AmountInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState(false);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const touchDevice = useTouchDevice();
-
-  const handleStep = (direction: 1 | -1) => {
-    onChange(stepAmount(value, direction));
-  };
+  const mobileUi = useMobileUi();
 
   const handleOperator = (operator: '+' | '-') => {
     onChange(appendAmountOperator(value, operator));
+    inputRef.current?.focus();
   };
-
-  const openKeyboard = () => {
-    setFocused(true);
-    setKeyboardOpen(true);
-    onFocus?.({} as FocusEvent<HTMLInputElement>);
-  };
-
-  const closeKeyboard = () => {
-    setKeyboardOpen(false);
-    setFocused(false);
-    onChange(evaluateAmountExpression(value));
-    onBlur?.({} as FocusEvent<HTMLInputElement>);
-  };
-
-  if (touchDevice) {
-    return (
-      <>
-        <div className={styles.wrapper}>
-          <button
-            type="button"
-            aria-label="Importe"
-            aria-required={required || undefined}
-            className={[
-              styles.input,
-              styles.inputButton,
-              focused && styles.inputFocused,
-              !value && styles.inputPlaceholder,
-              className,
-            ]
-              .filter(Boolean)
-              .join(' ')}
-            onClick={openKeyboard}
-          >
-            {value || placeholder}
-          </button>
-          {required && (
-            <input
-              tabIndex={-1}
-              aria-hidden="true"
-              className={styles.validator}
-              value={value}
-              required
-              readOnly
-              onFocus={(event) => event.target.blur()}
-            />
-          )}
-        </div>
-        <AmountKeyboard
-          open={keyboardOpen}
-          value={value}
-          onChange={onChange}
-          onDone={closeKeyboard}
-          onDismiss={closeKeyboard}
-        />
-      </>
-    );
-  }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.field}>
-        {focused && (
-          <button
-            type="button"
-            className={styles.stepButton}
-            aria-label="Restar importe"
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => handleStep(-1)}
-          >
-            −
-          </button>
-        )}
+    <>
+      <div className={styles.wrapper}>
         <input
+          ref={inputRef}
           type="text"
           inputMode="decimal"
-          enterKeyHint="next"
+          enterKeyHint="done"
           autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
           placeholder={placeholder}
           required={required}
-          className={[styles.input, className].filter(Boolean).join(' ')}
+          className={[styles.input, focused && styles.inputFocused, className].filter(Boolean).join(' ')}
           value={value}
           onChange={(event) => onChange(sanitizeAmountTyping(event.target.value))}
           onFocus={(event) => {
@@ -158,54 +87,16 @@ export function AmountInput({
             onChange(evaluateAmountExpression(value));
             onBlur?.(event);
           }}
-          onKeyDown={(event) => {
-            if (event.key === 'ArrowUp') {
-              event.preventDefault();
-              handleStep(1);
-            }
-            if (event.key === 'ArrowDown') {
-              event.preventDefault();
-              handleStep(-1);
-            }
-            onKeyDown?.(event);
-          }}
           {...props}
         />
-        {focused && (
-          <button
-            type="button"
-            className={styles.stepButton}
-            aria-label="Sumar importe"
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => handleStep(1)}
-          >
-            +
-          </button>
-        )}
       </div>
-      {focused && (
-        <div className={styles.operatorRow}>
-          <span className={styles.hint}>Calcular</span>
-          <button
-            type="button"
-            className={styles.operatorButton}
-            aria-label="Añadir suma"
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => handleOperator('+')}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            className={styles.operatorButton}
-            aria-label="Añadir resta"
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => handleOperator('-')}
-          >
-            −
-          </button>
-        </div>
+      {mobileUi && (
+        <AmountInputAccessory
+          visible={focused}
+          onPlus={() => handleOperator('+')}
+          onMinus={() => handleOperator('-')}
+        />
       )}
-    </div>
+    </>
   );
 }
