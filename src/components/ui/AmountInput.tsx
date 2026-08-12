@@ -1,10 +1,9 @@
-import { type InputHTMLAttributes, useEffect, useRef, useState } from 'react';
+import { type InputHTMLAttributes, type PointerEvent, useEffect, useRef, useState } from 'react';
 import {
   appendAmountOperator,
   evaluateAmountExpression,
   sanitizeAmountTyping,
 } from '@/utils/amountInput';
-import { AmountInputAccessory } from './AmountInputAccessory';
 import styles from './AmountInput.module.css';
 
 type AmountInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'inputMode' | 'value' | 'onChange'> & {
@@ -61,9 +60,14 @@ export function AmountInput({
     inputRef.current?.focus();
   };
 
+  const handleOperatorPointerDown = (operator: '+' | '-') => (event: PointerEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    handleOperator(operator);
+  };
+
   return (
-    <>
-      <div className={styles.wrapper}>
+    <div className={styles.wrapper}>
+      <div className={styles.row}>
         <input
           ref={inputRef}
           type="text"
@@ -89,14 +93,30 @@ export function AmountInput({
           }}
           {...props}
         />
+        {mobileUi && (
+          <>
+            <button
+              type="button"
+              className={styles.operatorButton}
+              aria-label="Sumar"
+              onPointerDown={handleOperatorPointerDown('+')}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              className={styles.operatorButton}
+              aria-label="Restar"
+              onPointerDown={handleOperatorPointerDown('-')}
+            >
+              −
+            </button>
+          </>
+        )}
       </div>
-      {mobileUi && (
-        <AmountInputAccessory
-          visible={focused}
-          onPlus={() => handleOperator('+')}
-          onMinus={() => handleOperator('-')}
-        />
+      {mobileUi && focused && (
+        <p className={styles.hint}>Usa el teclado numérico para dígitos y estos botones para sumar o restar.</p>
       )}
-    </>
+    </div>
   );
 }
