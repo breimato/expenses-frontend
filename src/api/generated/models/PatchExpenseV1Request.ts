@@ -63,6 +63,12 @@ export interface PatchExpenseV1Request {
      * @memberof PatchExpenseV1Request
      */
     offsetsSpendingAverage?: boolean;
+    /**
+     * Income only: optional link to the expense this reimbursement offsets. When set, offsetsSpendingAverage is forced to true. Clear with null.
+     * @type {number}
+     * @memberof PatchExpenseV1Request
+     */
+    reimbursedExpenseId?: number | null;
 }
 
 
@@ -90,6 +96,7 @@ export function PatchExpenseV1RequestFromJSONTyped(json: any, ignoreDiscriminato
         'expenseDate': json['expenseDate'] == null ? undefined : (new Date(json['expenseDate'])),
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
         'offsetsSpendingAverage': json['offsetsSpendingAverage'] == null ? undefined : json['offsetsSpendingAverage'],
+        'reimbursedExpenseId': json['reimbursedExpenseId'] == null ? undefined : json['reimbursedExpenseId'],
     };
 }
 
@@ -110,6 +117,7 @@ export function PatchExpenseV1RequestToJSONTyped(value?: PatchExpenseV1Request |
         'expenseDate': value['expenseDate'] == null ? value['expenseDate'] : value['expenseDate'].toISOString().substring(0,10),
         'movementType': MovementTypeV1ToJSON(value['movementType']),
         'offsetsSpendingAverage': value['offsetsSpendingAverage'],
+        'reimbursedExpenseId': value['reimbursedExpenseId'],
     };
 }
 

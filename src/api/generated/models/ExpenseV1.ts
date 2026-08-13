@@ -70,6 +70,12 @@ export interface ExpenseV1 {
      */
     offsetsSpendingAverage?: boolean;
     /**
+     * Income only: optional link to the expense this reimbursement offsets. When set, category breakdown nets this amount against the linked expense category.
+     * @type {number}
+     * @memberof ExpenseV1
+     */
+    reimbursedExpenseId?: number | null;
+    /**
      * Creation timestamp
      * @type {Date}
      * @memberof ExpenseV1
@@ -109,6 +115,7 @@ export function ExpenseV1FromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'expenseDate': json['expenseDate'] == null ? undefined : (new Date(json['expenseDate'])),
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
         'offsetsSpendingAverage': json['offsetsSpendingAverage'] == null ? undefined : json['offsetsSpendingAverage'],
+        'reimbursedExpenseId': json['reimbursedExpenseId'] == null ? undefined : json['reimbursedExpenseId'],
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
     };
@@ -132,6 +139,7 @@ export function ExpenseV1ToJSONTyped(value?: ExpenseV1 | null, ignoreDiscriminat
         'expenseDate': value['expenseDate'] == null ? value['expenseDate'] : value['expenseDate'].toISOString().substring(0,10),
         'movementType': MovementTypeV1ToJSON(value['movementType']),
         'offsetsSpendingAverage': value['offsetsSpendingAverage'],
+        'reimbursedExpenseId': value['reimbursedExpenseId'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
     };

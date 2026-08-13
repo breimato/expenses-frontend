@@ -18,7 +18,7 @@ import {
   useExpenses,
   useUpdateExpense,
 } from '@/hooks/useExpenses';
-import { formatDate, toApiAmount, toApiDate, toInputDate } from '@/utils/format';
+import { formatAmount, formatDate, toApiAmount, toApiDate, toInputDate } from '@/utils/format';
 import styles from './Page.module.css';
 
 type MovementTypeFilter = '' | MovementTypeV1;
@@ -30,6 +30,7 @@ type MovementFormState = {
   description: string;
   expenseDate: string;
   offsetsSpendingAverage: boolean;
+  reimbursedExpenseId: string;
 };
 
 const emptyForm = (): MovementFormState => ({
@@ -39,10 +40,18 @@ const emptyForm = (): MovementFormState => ({
   description: '',
   expenseDate: todayIsoDate(),
   offsetsSpendingAverage: false,
+  reimbursedExpenseId: '',
 });
 
 function movementTypeLabel(movementType: MovementTypeV1 | undefined): string {
   return movementType === 'INCOME' ? 'Ingreso' : 'Gasto';
+}
+
+function expenseLinkLabel(expense: ExpenseV1): string {
+  const date = formatDate(expense.expenseDate);
+  const amount = formatAmount(expense.amount);
+  const description = expense.description?.trim() || 'Sin descripción';
+  return `${date} · ${description} · ${amount}`;
 }
 
 export function MovementsPage() {
@@ -71,6 +80,7 @@ export function MovementsPage() {
   );
   const { data: formCategoriesData } = useCategories({ movementType: form.movementType });
   const { data, isLoading, isError } = useExpenses(filters);
+  const { data: linkableExpensesData } = useExpenses({ movementType: 'EXPENSE' });
   const createMovement = useCreateExpense();
   const updateMovement = useUpdateExpense();
   const deleteMovement = useDeleteExpense();
@@ -81,6 +91,10 @@ export function MovementsPage() {
   const formCategories = formCategoriesData?.categories ?? [];
   const categoryMap = new Map(allCategories.map((category) => [category.id, category]));
   const movements = data?.expenses ?? [];
+  const linkableExpenses = (linkableExpensesData?.expenses ?? [])
+    .filter((expense) => expense.id != null && expense.id !== editing?.id)
+    .slice()
+    .sort((a, b) => String(b.expenseDate ?? '').localeCompare(String(a.expenseDate ?? '')));
 
   const handleTypeFilterChange = (value: string) => {
     setTypeFilter(value as MovementTypeFilter);
@@ -102,6 +116,10 @@ export function MovementsPage() {
       description: movement.description ?? '',
       expenseDate: toInputDate(movement.expenseDate),
       offsetsSpendingAverage: movement.offsetsSpendingAverage ?? false,
+      reimbursedExpenseId:
+        movement.movementType === 'INCOME' && movement.reimbursedExpenseId != null
+          ? String(movement.reimbursedExpenseId)
+          : '',
     });
     setModalOpen(true);
   };
@@ -117,11 +135,22 @@ export function MovementsPage() {
       movementType: value as MovementTypeV1,
       categoryId: '',
       offsetsSpendingAverage: false,
+      reimbursedExpenseId: '',
     });
+  };
+
+  const handleReimbursedExpenseChange = (value: string) => {
+    setForm({ ...form, reimbursedExpenseId: value });
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const reimbursedExpenseId =
+      form.movementType === 'INCOME' && form.reimbursedExpenseId
+        ? Number(form.reimbursedExpenseId)
+        : null;
+    const offsetsSpendingAverage =
+      form.movementType === 'INCOME' ? reimbursedExpenseId != null : form.offsetsSpendingAverage;
     try {
       if (editing?.id) {
         const body: PatchExpenseV1Request = {
@@ -130,7 +159,8 @@ export function MovementsPage() {
           description: form.description,
           expenseDate: toApiDate(form.expenseDate),
           movementType: form.movementType,
-          offsetsSpendingAverage: form.offsetsSpendingAverage,
+          offsetsSpendingAverage,
+          reimbursedExpenseId,
         };
         await updateMovement.mutateAsync({ id: editing.id, body });
       } else {
@@ -140,7 +170,8 @@ export function MovementsPage() {
           description: form.description,
           expenseDate: toApiDate(form.expenseDate),
           movementType: form.movementType,
-          offsetsSpendingAverage: form.offsetsSpendingAverage,
+          offsetsSpendingAverage,
+          ...(reimbursedExpenseId != null ? { reimbursedExpenseId } : {}),
         };
         await createMovement.mutateAsync(body);
       }
@@ -301,15 +332,15 @@ export function MovementsPage() {
             />
           </Field>
           {form.movementType === 'INCOME' ? (
-            <Field label="Compensa en la media de gastos">
-              <label className={styles.checkboxRow}>
-                <input
-                  type="checkbox"
-                  checked={form.offsetsSpendingAverage}
-                  onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
-                />
-                <span>Para bizums o reembolsos de gastos que pagaste tú</span>
-              </label>
+            <Field label="Gasto reembolsado">
+              <Select value={form.reimbursedExpenseId} onChange={(e) => handleReimbursedExpenseChange(e.target.value)}>
+                <option value="">Ninguno</option>
+                {linkableExpenses.map((expense) => (
+                  <option key={expense.id} value={expense.id}>
+                    {expenseLinkLabel(expense)}
+                  </option>
+                ))}
+              </Select>
             </Field>
           ) : (
             <Field label="Excluir de la media de gastos">

@@ -47,7 +47,7 @@
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: var(--space-sm);
+  padding: var(--space-md) var(--space-sm) var(--space-lg);
 }
 
 .actions {

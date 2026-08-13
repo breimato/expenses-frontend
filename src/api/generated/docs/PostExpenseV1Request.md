@@ -13,6 +13,7 @@ Name | Type
 `expenseDate` | Date
 `movementType` | [MovementTypeV1](MovementTypeV1.md)
 `offsetsSpendingAverage` | boolean
+`reimbursedExpenseId` | number
 
 ## Example
 
@@ -27,6 +28,7 @@ const example = {
   "expenseDate": null,
   "movementType": null,
   "offsetsSpendingAverage": null,
+  "reimbursedExpenseId": null,
 } satisfies PostExpenseV1Request
 
 console.log(example)

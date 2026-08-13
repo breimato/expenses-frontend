@@ -63,6 +63,12 @@ export interface PostExpenseV1Request {
      * @memberof PostExpenseV1Request
      */
     offsetsSpendingAverage?: boolean;
+    /**
+     * Income only: optional link to the expense this reimbursement offsets. When set, offsetsSpendingAverage is forced to true.
+     * @type {number}
+     * @memberof PostExpenseV1Request
+     */
+    reimbursedExpenseId?: number | null;
 }
 
 
@@ -94,6 +100,7 @@ export function PostExpenseV1RequestFromJSONTyped(json: any, ignoreDiscriminator
         'expenseDate': (new Date(json['expenseDate'])),
         'movementType': json['movementType'] == null ? undefined : MovementTypeV1FromJSON(json['movementType']),
         'offsetsSpendingAverage': json['offsetsSpendingAverage'] == null ? undefined : json['offsetsSpendingAverage'],
+        'reimbursedExpenseId': json['reimbursedExpenseId'] == null ? undefined : json['reimbursedExpenseId'],
     };
 }
 
@@ -114,6 +121,7 @@ export function PostExpenseV1RequestToJSONTyped(value?: PostExpenseV1Request | n
         'expenseDate': value['expenseDate'].toISOString().substring(0,10),
         'movementType': MovementTypeV1ToJSON(value['movementType']),
         'offsetsSpendingAverage': value['offsetsSpendingAverage'],
+        'reimbursedExpenseId': value['reimbursedExpenseId'],
     };
 }
 
