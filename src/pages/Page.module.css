@@ -148,6 +148,20 @@
   gap: var(--space-md);
 }
 
+.monthSwitcher {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.monthLabel {
+  min-width: 10rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
 @media (min-width: 768px) {
   .page {
     gap: var(--space-xl);

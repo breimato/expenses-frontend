@@ -29,8 +29,8 @@ function readStoredView(): ViewMode {
   }
 }
 
-export function CategorySpendBreakdown() {
-  const { categoryBreakdown } = useAnalytics();
+export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: string }) {
+  const { categoryBreakdown } = useAnalytics(referenceDate);
   const { data: categoriesData } = useCategories({ movementType: 'EXPENSE' });
   const [viewMode, setViewMode] = useState<ViewMode>(readStoredView);
 
