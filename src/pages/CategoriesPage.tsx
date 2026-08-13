@@ -1,7 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import type { CategoryV1, MovementTypeV1, PatchCategoryV1Request, PostCategoryV1Request } from '@/api/generated';
 import { Button } from '@/components/ui/Button';
-import { CategoryStripe } from '@/components/ui/CategoryStripe';
+import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { ColorPicker } from '@/components/ui/ColorPicker';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable } from '@/components/ui/DataTable';
@@ -126,19 +126,16 @@ export function CategoriesPage() {
       {isError && <StateMessage message="Error al cargar categorías" variant="error" />}
       {!isLoading && !isError && (
         <DataTable
-          headers={['Color', 'Nombre', 'Tipo', 'Icono', '']}
-          hideOnMobile={[3]}
+          headers={['Categoría', 'Tipo', '']}
           isEmpty={categories.length === 0}
           emptyMessage="Sin categorías"
         >
           {categories.map((category) => (
             <tr key={category.id}>
               <td>
-                <CategoryStripe color={category.color} />
+                <CategoryLabel color={category.color} icon={category.icon} name={category.name} />
               </td>
-              <td>{category.name}</td>
               <td>{category.movementType === 'INCOME' ? 'Ingreso' : 'Gasto'}</td>
-              <td>{category.icon ?? '—'}</td>
               <td>
                 <div className={styles.rowActions}>
                   <Button size="small" onClick={() => openEdit(category)}>

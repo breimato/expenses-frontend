@@ -3,8 +3,7 @@ import styles from './BottomNav.module.css';
 
 const links = [
   { to: '/', label: 'Inicio', end: true, icon: HomeIcon },
-  { to: '/gastos', label: 'Gastos', icon: ExpenseIcon },
-  { to: '/ingresos', label: 'Ingresos', icon: IncomeIcon },
+  { to: '/movimientos', label: 'Movimientos', icon: MovementIcon },
   { to: '/plantillas', label: 'Plantillas', icon: TemplateIcon },
   { to: '/categorias', label: 'Categorías', icon: CategoryIcon },
 ] as const;
@@ -40,20 +39,11 @@ function HomeIcon({ className }: { className?: string }) {
   );
 }
 
-function ExpenseIcon({ className }: { className?: string }) {
+function MovementIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75">
-      <path d="M12 5v14M8 15l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 8h14" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function IncomeIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75">
-      <path d="M12 19V5M8 9l4-4 4 4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 16h14" strokeLinecap="round" />
+      <path d="M7 8h14M7 8l3-3M7 8l3 3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 16H3M17 16l-3-3M17 16l-3 3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

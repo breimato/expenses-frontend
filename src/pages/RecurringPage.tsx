@@ -8,7 +8,7 @@ import type {
 } from '@/api/generated';
 import { Amount } from '@/components/ui/Amount';
 import { Button } from '@/components/ui/Button';
-import { CategoryStripe } from '@/components/ui/CategoryStripe';
+import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable } from '@/components/ui/DataTable';
 import { ErrorDialog } from '@/components/ui/ErrorDialog';
@@ -209,10 +209,7 @@ export function RecurringPage() {
                 </td>
                 <td>{templateTypeLabel(template.movementType)}</td>
                 <td>
-                  <span className={styles.categoryCell}>
-                    <CategoryStripe color={category?.color} />
-                    {category?.name ?? '—'}
-                  </span>
+                  <CategoryLabel color={category?.color} icon={category?.icon} name={category?.name} />
                 </td>
                 <td style={{ textAlign: 'right' }}>
                   <Amount value={template.amount} />

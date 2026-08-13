@@ -10,9 +10,10 @@ import {
   YAxis,
 } from 'recharts';
 import { Amount } from '@/components/ui/Amount';
-import { CategoryStripe } from '@/components/ui/CategoryStripe';
+import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { useCategories } from '@/hooks/useCategories';
 import { formatAmount } from '@/utils/format';
 import styles from './CategorySpendBreakdown.module.css';
 
@@ -30,7 +31,12 @@ function readStoredView(): ViewMode {
 
 export function CategorySpendBreakdown() {
   const { categoryBreakdown } = useAnalytics();
+  const { data: categoriesData } = useCategories({ movementType: 'EXPENSE' });
   const [viewMode, setViewMode] = useState<ViewMode>(readStoredView);
+
+  const categoryIconMap = new Map(
+    (categoriesData?.categories ?? []).map((category) => [category.id, category.icon]),
+  );
 
   const setView = (next: ViewMode) => {
     setViewMode(next);
@@ -106,8 +112,11 @@ export function CategorySpendBreakdown() {
           {items.map((item) => (
             <li key={item.categoryId} className={styles.row}>
               <span className={styles.category}>
-                <CategoryStripe color={item.categoryColor} />
-                <span className={styles.name}>{item.categoryName}</span>
+                <CategoryLabel
+                  color={item.categoryColor}
+                  icon={categoryIconMap.get(item.categoryId)}
+                  name={item.categoryName}
+                />
               </span>
               <span className={styles.meta}>
                 <Amount value={item.total} />

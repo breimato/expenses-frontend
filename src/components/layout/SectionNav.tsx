@@ -3,8 +3,7 @@ import styles from './SectionNav.module.css';
 
 const links = [
   { to: '/', label: 'Inicio', end: true },
-  { to: '/gastos', label: 'Gastos' },
-  { to: '/ingresos', label: 'Ingresos' },
+  { to: '/movimientos', label: 'Movimientos' },
   { to: '/plantillas', label: 'Plantillas' },
   { to: '/categorias', label: 'Categorías' },
 ] as const;

@@ -2,7 +2,7 @@ import { AnalyticsStrip } from '@/components/features/AnalyticsStrip';
 import { CategorySpendBreakdown } from '@/components/features/CategorySpendBreakdown';
 import { QuickAddBar } from '@/components/features/QuickAddBar';
 import { Amount } from '@/components/ui/Amount';
-import { CategoryStripe } from '@/components/ui/CategoryStripe';
+import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { DataTable } from '@/components/ui/DataTable';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { useCategories } from '@/hooks/useCategories';
@@ -57,10 +57,7 @@ export function HomePage() {
                   <td>{formatDate(expense.expenseDate)}</td>
                   <td>{expense.description}</td>
                   <td>
-                    <span className={styles.categoryCell}>
-                      <CategoryStripe color={category?.color} />
-                      {category?.name ?? '—'}
-                    </span>
+                    <CategoryLabel color={category?.color} icon={category?.icon} name={category?.name} />
                   </td>
                   <td>
                     <Amount value={expense.amount} />
