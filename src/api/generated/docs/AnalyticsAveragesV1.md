@@ -8,6 +8,7 @@ Analytics Averages V1
 Name | Type
 ------------ | -------------
 `dailyAverage` | string
+`balanceAsOf` | string
 
 ## Example
 
@@ -17,6 +18,7 @@ import type { AnalyticsAveragesV1 } from ''
 // TODO: Update the object below with actual values
 const example = {
   "dailyAverage": null,
+  "balanceAsOf": null,
 } satisfies AnalyticsAveragesV1
 
 console.log(example)

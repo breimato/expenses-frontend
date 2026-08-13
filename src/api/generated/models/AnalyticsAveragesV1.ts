@@ -20,11 +20,17 @@ import { mapValues } from '../runtime';
  */
 export interface AnalyticsAveragesV1 {
     /**
-     * Daily average net spending for the current month (from day 1)
+     * Daily average net spending for the month ending on the reference date
      * @type {string}
      * @memberof AnalyticsAveragesV1
      */
     dailyAverage?: string;
+    /**
+     * Net account balance from all movements on or before the reference date
+     * @type {string}
+     * @memberof AnalyticsAveragesV1
+     */
+    balanceAsOf?: string;
 }
 
 /**
@@ -45,6 +51,7 @@ export function AnalyticsAveragesV1FromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'dailyAverage': json['dailyAverage'] == null ? undefined : json['dailyAverage'],
+        'balanceAsOf': json['balanceAsOf'] == null ? undefined : json['balanceAsOf'],
     };
 }
 
@@ -60,6 +67,7 @@ export function AnalyticsAveragesV1ToJSONTyped(value?: AnalyticsAveragesV1 | nul
     return {
         
         'dailyAverage': value['dailyAverage'],
+        'balanceAsOf': value['balanceAsOf'],
     };
 }
 

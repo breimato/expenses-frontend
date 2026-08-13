@@ -8,12 +8,16 @@ import {
 import { queryKeys } from '@/api/queryKeys';
 import { useAuth } from '@/context/AuthContext';
 
-export function useAnalytics(referenceDate: string = todayIsoDate()) {
+export function useAnalytics(
+  referenceDate: string = todayIsoDate(),
+  options: { includeProjections?: boolean } = {},
+) {
   const { user } = useAuth();
   const userId = user?.id;
   // Noon local avoids UTC day shift when serializing to ISO date string.
   const date = new Date(`${referenceDate}T12:00:00`);
   const enabled = Boolean(userId);
+  const includeProjections = options.includeProjections ?? true;
 
   const averages = useQuery({
     queryKey: [...queryKeys.analytics(userId ?? 0, referenceDate), 'averages'],
@@ -30,7 +34,7 @@ export function useAnalytics(referenceDate: string = todayIsoDate()) {
       getAnalyticsProjectionsApi.getAnalyticsProjectionsV1({
         getAnalyticsProjectionsV1Request: { referenceDate: date },
       }),
-    enabled,
+    enabled: enabled && includeProjections,
   });
 
   const categoryBreakdown = useQuery({
