@@ -18,7 +18,7 @@ import {
   useExpenses,
   useUpdateExpense,
 } from '@/hooks/useExpenses';
-import { formatAmount, formatDate, toApiAmount, toApiDate, toInputDate } from '@/utils/format';
+import { formatAmount, formatDate, toApiAmount, toApiDate, toInputDate, toLocalIsoDate } from '@/utils/format';
 import styles from './Page.module.css';
 
 type MovementTypeFilter = '' | MovementTypeV1;
@@ -45,6 +45,13 @@ const emptyForm = (): MovementFormState => ({
 
 function movementTypeLabel(movementType: MovementTypeV1 | undefined): string {
   return movementType === 'INCOME' ? 'Ingreso' : 'Gasto';
+}
+
+function expenseDateKey(expenseDate: string | Date | undefined): string {
+  if (!expenseDate) {
+    return '';
+  }
+  return expenseDate instanceof Date ? toLocalIsoDate(expenseDate) : expenseDate.slice(0, 10);
 }
 
 function expenseLinkLabel(expense: ExpenseV1): string {
@@ -94,7 +101,15 @@ export function MovementsPage() {
   const linkableExpenses = (linkableExpensesData?.expenses ?? [])
     .filter((expense) => expense.id != null && expense.id !== editing?.id)
     .slice()
-    .sort((a, b) => String(b.expenseDate ?? '').localeCompare(String(a.expenseDate ?? '')));
+    .sort((expenseA, expenseB) => {
+      const dateCompare = expenseDateKey(expenseB.expenseDate).localeCompare(
+        expenseDateKey(expenseA.expenseDate),
+      );
+      if (dateCompare !== 0) {
+        return dateCompare;
+      }
+      return (expenseB.id ?? 0) - (expenseA.id ?? 0);
+    });
 
   const handleTypeFilterChange = (value: string) => {
     setTypeFilter(value as MovementTypeFilter);
