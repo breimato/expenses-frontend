@@ -1,0 +1,117 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-height: min(70vh, 40rem);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.daySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.dayHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) 11rem 1fr max-content;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  background: var(--color-paper);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dayLabel {
+  margin: 0;
+  grid-column: 1 / 3;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.dayTotal {
+  grid-column: 4;
+  justify-self: end;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) 11rem 1fr max-content;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.description {
+  min-width: 0;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.rowAmount {
+  grid-column: 4;
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 767px) {
+  .dayHeader,
+  .row {
+    grid-template-columns: minmax(0, 7.5rem) 8.5rem 1fr max-content;
+    gap: var(--space-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .list {
+    max-height: min(60vh, 36rem);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-paper-elevated);
+    box-shadow: 0 1px 2px rgb(26 24 20 / 0.04);
+  }
+
+  .dayHeader {
+    background: var(--color-paper-elevated);
+    margin: 0 calc(-1 * var(--space-md));
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+}

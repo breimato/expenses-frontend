@@ -1,17 +1,14 @@
 import { useMemo, useState } from 'react';
 import { AnalyticsStrip } from '@/components/features/AnalyticsStrip';
 import { CategorySpendBreakdown } from '@/components/features/CategorySpendBreakdown';
+import { ExpensesByDayList } from '@/components/features/ExpensesByDayList';
 import { QuickAddBar } from '@/components/features/QuickAddBar';
-import { Amount } from '@/components/ui/Amount';
 import { Button } from '@/components/ui/Button';
-import { CategoryLabel } from '@/components/ui/CategoryStripe';
-import { DataTable } from '@/components/ui/DataTable';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { todayIsoDate } from '@/api/client';
 import { useCategories } from '@/hooks/useCategories';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useProfile } from '@/hooks/useProfile';
-import { formatDate } from '@/utils/format';
 import {
   expenseInMonth,
   formatMonthLabel,
@@ -34,9 +31,7 @@ export function HomePage() {
   const categoryMap = new Map(categories.map((c) => [c.id, c]));
 
   const expenses = useMemo(() => {
-    return (data?.expenses ?? [])
-      .filter((expense) => expenseInMonth(expense.expenseDate, monthValue))
-      .slice(0, 15);
+    return (data?.expenses ?? []).filter((expense) => expenseInMonth(expense.expenseDate, monthValue));
   }, [data?.expenses, monthValue]);
 
   const canGoNext = monthValue < toMonthValue(todayIsoDate());
@@ -87,33 +82,12 @@ export function HomePage() {
 
       <section className={`${styles.latestExpensesSection} ${styles.homeLatestOrder}`}>
         <div className={styles.header}>
-          <h2>{currentMonth ? 'Últimos gastos' : 'Gastos del mes'}</h2>
+          <h2>Gastos por día</h2>
         </div>
         {isLoading && <StateMessage message="Cargando gastos…" />}
         {isError && <StateMessage message="No se pudieron cargar los gastos" variant="error" />}
         {!isLoading && !isError && (
-          <DataTable
-            headers={['Fecha', 'Concepto', 'Categoría', 'Importe']}
-            alignRight={[3]}
-            isEmpty={expenses.length === 0}
-            emptyMessage="No hay gastos en este mes"
-          >
-            {expenses.map((expense) => {
-              const category = expense.categoryId ? categoryMap.get(expense.categoryId) : undefined;
-              return (
-                <tr key={expense.id}>
-                  <td>{formatDate(expense.expenseDate)}</td>
-                  <td>{expense.description}</td>
-                  <td>
-                    <CategoryLabel color={category?.color} icon={category?.icon} name={category?.name} />
-                  </td>
-                  <td>
-                    <Amount value={expense.amount} />
-                  </td>
-                </tr>
-              );
-            })}
-          </DataTable>
+          <ExpensesByDayList expenses={expenses} categoryMap={categoryMap} />
         )}
       </section>
     </div>
