@@ -5,6 +5,7 @@ import {
   DeleteRecurringTemplateV1Api,
   GetAnalyticsAveragesV1Api,
   GetAnalyticsCategoryBreakdownV1Api,
+  GetAnalyticsPeriodAverageV1Api,
   GetAnalyticsProjectionsV1Api,
   GetCategoriesV1Api,
   GetExpensesV1Api,
@@ -62,6 +63,7 @@ export let patchProfileApi = new PatchProfileV1Api(config);
 
 export let getAnalyticsAveragesApi = new GetAnalyticsAveragesV1Api(config);
 export let getAnalyticsCategoryBreakdownApi = new GetAnalyticsCategoryBreakdownV1Api(config);
+export let getAnalyticsPeriodAverageApi = new GetAnalyticsPeriodAverageV1Api(config);
 export let getAnalyticsProjectionsApi = new GetAnalyticsProjectionsV1Api(config);
 
 /** Rebuild API clients after runtime config is loaded. */
@@ -87,6 +89,7 @@ export function initApiClient(): void {
   patchProfileApi = new PatchProfileV1Api(config);
   getAnalyticsAveragesApi = new GetAnalyticsAveragesV1Api(config);
   getAnalyticsCategoryBreakdownApi = new GetAnalyticsCategoryBreakdownV1Api(config);
+  getAnalyticsPeriodAverageApi = new GetAnalyticsPeriodAverageV1Api(config);
   getAnalyticsProjectionsApi = new GetAnalyticsProjectionsV1Api(config);
 }
 

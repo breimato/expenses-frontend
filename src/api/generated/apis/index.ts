@@ -5,6 +5,7 @@ export * from './DeleteExpenseV1Api';
 export * from './DeleteRecurringTemplateV1Api';
 export * from './GetAnalyticsAveragesV1Api';
 export * from './GetAnalyticsCategoryBreakdownV1Api';
+export * from './GetAnalyticsPeriodAverageV1Api';
 export * from './GetAnalyticsProjectionsV1Api';
 export * from './GetCategoriesV1Api';
 export * from './GetExpensesV1Api';

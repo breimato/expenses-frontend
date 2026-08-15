@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { Amount } from '@/components/ui/Amount';
 import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { StateMessage } from '@/components/ui/StateMessage';
@@ -28,6 +19,13 @@ function readStoredView(): ViewMode {
     return 'list';
   }
 }
+
+type ChartDatum = {
+  name: string;
+  total: number;
+  color: string;
+  percent: string;
+};
 
 export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: string }) {
   const { categoryBreakdown } = useAnalytics(referenceDate);
@@ -70,10 +68,11 @@ export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: stri
     );
   }
 
-  const chartData = items.map((item) => ({
-    name: item.categoryName,
-    total: Number.parseFloat(item.total),
-    color: item.categoryColor,
+  const chartData: ChartDatum[] = items.map((item) => ({
+    name: item.categoryName ?? 'Sin categoría',
+    total: Number.parseFloat(item.total ?? '0'),
+    color: item.categoryColor ?? '#6B7280',
+    percent: item.percent ?? '0',
   }));
 
   return (
@@ -122,15 +121,12 @@ export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: stri
                 <Amount value={item.total} />
                 <span className={styles.percent}>{item.percent}%</span>
               </span>
-              <span
-                className={styles.barTrack}
-                aria-hidden
-              >
+              <span className={styles.barTrack} aria-hidden>
                 <span
                   className={styles.barFill}
                   style={{
-                    width: `${Math.min(100, Number.parseFloat(item.percent))}%`,
-                    backgroundColor: item.categoryColor,
+                    width: `${Math.min(100, Number.parseFloat(item.percent ?? '0'))}%`,
+                    backgroundColor: item.categoryColor ?? undefined,
                   }}
                 />
               </span>
@@ -139,41 +135,49 @@ export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: stri
         </ul>
       ) : (
         <div className={styles.chartWrap}>
-          <ResponsiveContainer width="100%" height={Math.max(220, items.length * 44)}>
-            <BarChart
-              data={chartData}
-              layout="vertical"
-              margin={{ top: 8, right: 16, left: 8, bottom: 8 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--color-border)" />
-              <XAxis
-                type="number"
-                tickFormatter={(value: number) => `${formatAmount(value)} €`}
-                stroke="var(--color-text-muted)"
-                fontSize={12}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                width={96}
-                stroke="var(--color-text-muted)"
-                fontSize={12}
-              />
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="total"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={58}
+                outerRadius={100}
+                paddingAngle={2}
+                stroke="var(--color-surface)"
+                strokeWidth={2}
+              >
+                {chartData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
+              </Pie>
               <Tooltip
-                formatter={(value) => [`${formatAmount(value as number | string)} €`, 'Total']}
+                formatter={(value, _name, item) => {
+                  const datum = item?.payload as ChartDatum | undefined;
+                  const label = datum ? `${datum.percent}%` : 'Total';
+                  return [`${formatAmount(value as number | string)} €`, label];
+                }}
                 contentStyle={{
                   background: 'var(--color-surface)',
                   border: '1px solid var(--color-border)',
                   borderRadius: 'var(--radius-md)',
                 }}
               />
-              <Bar dataKey="total" radius={[0, 4, 4, 0]} maxBarSize={28}>
-                {chartData.map((entry) => (
-                  <Cell key={entry.name} fill={entry.color} />
-                ))}
-              </Bar>
-            </BarChart>
+            </PieChart>
           </ResponsiveContainer>
+          <ul className={styles.chartLegend}>
+            {chartData.map((entry) => (
+              <li key={entry.name} className={styles.legendItem}>
+                <span className={styles.legendSwatch} style={{ backgroundColor: entry.color }} aria-hidden />
+                <span className={styles.legendName}>{entry.name}</span>
+                <span className={styles.legendMeta}>
+                  {formatAmount(entry.total)} € · {entry.percent}%
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </section>

@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AnalyticsAveragesV1';
 export * from './AnalyticsCategorySpendItemV1';
+export * from './AnalyticsPeriodAverageV1';
 export * from './AnalyticsProjectionsV1';
 export * from './ApiError';
 export * from './ApiErrorV1';
@@ -15,6 +16,8 @@ export * from './GetAnalyticsAveragesV1Request';
 export * from './GetAnalyticsAveragesV1Response';
 export * from './GetAnalyticsCategoryBreakdownV1Response';
 export * from './GetAnalyticsCategoryBreakdownV1ResponseAnalyticsCategoryBreakdown';
+export * from './GetAnalyticsPeriodAverageV1Request';
+export * from './GetAnalyticsPeriodAverageV1Response';
 export * from './GetAnalyticsProjectionsV1Request';
 export * from './GetAnalyticsProjectionsV1Response';
 export * from './GetCategoriesV1Response';

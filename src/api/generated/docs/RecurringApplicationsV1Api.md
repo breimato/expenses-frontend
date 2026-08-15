@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 
 Post Recurring Applications V1
 
-Create recurring applications due for the current period
+Catch up auto-apply templates scheduled on or before today that were not applied yet this period
 
 ### Example
 

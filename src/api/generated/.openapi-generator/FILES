@@ -3,6 +3,7 @@ apis/DeleteExpenseV1Api.ts
 apis/DeleteRecurringTemplateV1Api.ts
 apis/GetAnalyticsAveragesV1Api.ts
 apis/GetAnalyticsCategoryBreakdownV1Api.ts
+apis/GetAnalyticsPeriodAverageV1Api.ts
 apis/GetAnalyticsProjectionsV1Api.ts
 apis/GetCategoriesV1Api.ts
 apis/GetExpensesV1Api.ts
@@ -22,6 +23,7 @@ apis/RecurringTemplateApplicationsV1Api.ts
 apis/index.ts
 docs/AnalyticsAveragesV1.md
 docs/AnalyticsCategorySpendItemV1.md
+docs/AnalyticsPeriodAverageV1.md
 docs/AnalyticsProjectionsV1.md
 docs/ApiError.md
 docs/ApiErrorV1.md
@@ -40,6 +42,9 @@ docs/GetAnalyticsAveragesV1Response.md
 docs/GetAnalyticsCategoryBreakdownV1Api.md
 docs/GetAnalyticsCategoryBreakdownV1Response.md
 docs/GetAnalyticsCategoryBreakdownV1ResponseAnalyticsCategoryBreakdown.md
+docs/GetAnalyticsPeriodAverageV1Api.md
+docs/GetAnalyticsPeriodAverageV1Request.md
+docs/GetAnalyticsPeriodAverageV1Response.md
 docs/GetAnalyticsProjectionsV1Api.md
 docs/GetAnalyticsProjectionsV1Request.md
 docs/GetAnalyticsProjectionsV1Response.md
@@ -81,6 +86,7 @@ docs/RecurringTemplateV1Response.md
 index.ts
 models/AnalyticsAveragesV1.ts
 models/AnalyticsCategorySpendItemV1.ts
+models/AnalyticsPeriodAverageV1.ts
 models/AnalyticsProjectionsV1.ts
 models/ApiError.ts
 models/ApiErrorV1.ts
@@ -94,6 +100,8 @@ models/GetAnalyticsAveragesV1Request.ts
 models/GetAnalyticsAveragesV1Response.ts
 models/GetAnalyticsCategoryBreakdownV1Response.ts
 models/GetAnalyticsCategoryBreakdownV1ResponseAnalyticsCategoryBreakdown.ts
+models/GetAnalyticsPeriodAverageV1Request.ts
+models/GetAnalyticsPeriodAverageV1Response.ts
 models/GetAnalyticsProjectionsV1Request.ts
 models/GetAnalyticsProjectionsV1Response.ts
 models/GetCategoriesV1Response.ts

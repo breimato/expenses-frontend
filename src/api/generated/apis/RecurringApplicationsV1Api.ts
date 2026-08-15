@@ -57,7 +57,7 @@ export class RecurringApplicationsV1Api extends runtime.BaseAPI {
     }
 
     /**
-     * Create recurring applications due for the current period
+     * Catch up auto-apply templates scheduled on or before today that were not applied yet this period
      * Post Recurring Applications V1
      */
     async postRecurringTemplatesApplyPendingV1Raw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostRecurringTemplatesApplyPendingV1Response>> {
@@ -68,7 +68,7 @@ export class RecurringApplicationsV1Api extends runtime.BaseAPI {
     }
 
     /**
-     * Create recurring applications due for the current period
+     * Catch up auto-apply templates scheduled on or before today that were not applied yet this period
      * Post Recurring Applications V1
      */
     async postRecurringTemplatesApplyPendingV1(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostRecurringTemplatesApplyPendingV1Response> {
