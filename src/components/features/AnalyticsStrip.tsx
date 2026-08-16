@@ -1,7 +1,10 @@
+import { useState } from 'react';
+import { PeriodAveragePanel } from '@/components/features/PeriodAveragePanel';
 import { Amount } from '@/components/ui/Amount';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { useProfile } from '@/hooks/useProfile';
+import { toMonthValue } from '@/utils/month';
 import styles from './AnalyticsStrip.module.css';
 
 type AnalyticsStripProps = {
@@ -14,6 +17,8 @@ export function AnalyticsStrip({ referenceDate, isCurrentMonth }: AnalyticsStrip
     includeProjections: isCurrentMonth,
   });
   const profile = useProfile();
+  const [periodOpen, setPeriodOpen] = useState(false);
+  const monthValue = toMonthValue(referenceDate);
 
   const loading =
     averages.isLoading || (isCurrentMonth && (projections.isLoading || profile.isLoading));
@@ -31,55 +36,66 @@ export function AnalyticsStrip({ referenceDate, isCurrentMonth }: AnalyticsStrip
   const daysRemaining = projections.data?.analyticsProjections?.daysRemainingInMonth;
   const balance = profile.data?.profile?.balance;
 
-  if (!isCurrentMonth) {
-    return (
-      <div className={styles.wrapper}>
-        <div className={`${styles.metric} ${styles.balance}`}>
-          <span className={styles.label}>Saldo al cierre</span>
-          <span className={styles.balanceValue}>
-            <Amount value={balanceAsOf} />
-          </span>
-          <span className={styles.sub}>a fin de mes</span>
-        </div>
-        <div className={styles.metric}>
-          <span className={styles.label}>Media diaria</span>
-          <span className={styles.value}>
-            <Amount value={dailyAverage} />
-          </span>
-          <span className={styles.sub}>gasto neto del mes</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.wrapper}>
-      <div className={`${styles.metric} ${styles.balance}`}>
-        <span className={styles.label}>Balance</span>
-        <span className={styles.balanceValue}>
-          <Amount value={balance} />
-        </span>
-        <span className={styles.sub}>saldo actual</span>
-      </div>
+      {!isCurrentMonth ? (
+        <>
+          <div className={`${styles.metric} ${styles.balance}`}>
+            <span className={styles.label}>Saldo al cierre</span>
+            <span className={styles.balanceValue}>
+              <Amount value={balanceAsOf} />
+            </span>
+            <span className={styles.sub}>a fin de mes</span>
+          </div>
+          <div className={styles.metric}>
+            <span className={styles.label}>Media diaria</span>
+            <span className={styles.value}>
+              <Amount value={dailyAverage} />
+            </span>
+            <span className={styles.sub}>gasto neto del mes</span>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={`${styles.metric} ${styles.balance}`}>
+            <span className={styles.label}>Balance</span>
+            <span className={styles.balanceValue}>
+              <Amount value={balance} />
+            </span>
+            <span className={styles.sub}>saldo actual</span>
+          </div>
 
-      <div className={styles.row}>
-        <div className={styles.metric}>
-          <span className={styles.label}>Estimación de dinero a final de mes</span>
-          <span className={styles.value}>
-            <Amount value={endBalance} />
-          </span>
-          {daysRemaining !== undefined && (
-            <span className={styles.sub}>{daysRemaining} días restantes</span>
-          )}
+          <div className={styles.row}>
+            <div className={styles.metric}>
+              <span className={styles.label}>Estimación de dinero a final de mes</span>
+              <span className={styles.value}>
+                <Amount value={endBalance} />
+              </span>
+              {daysRemaining !== undefined && (
+                <span className={styles.sub}>{daysRemaining} días restantes</span>
+              )}
+            </div>
+            <div className={styles.metric}>
+              <span className={styles.label}>Media diaria</span>
+              <span className={styles.value}>
+                <Amount value={dailyAverage} />
+              </span>
+              <span className={styles.sub}>gasto neto del mes</span>
+            </div>
+          </div>
+        </>
+      )}
+
+      <details
+        className={styles.periodDetails}
+        open={periodOpen}
+        onToggle={(event) => setPeriodOpen(event.currentTarget.open)}
+      >
+        <summary className={styles.periodSummary}>Media entre fechas</summary>
+        <div className={styles.periodBody}>
+          <PeriodAveragePanel monthValue={monthValue} enabled={periodOpen} />
         </div>
-        <div className={styles.metric}>
-          <span className={styles.label}>Media diaria</span>
-          <span className={styles.value}>
-            <Amount value={dailyAverage} />
-          </span>
-          <span className={styles.sub}>gasto neto del mes</span>
-        </div>
-      </div>
+      </details>
     </div>
   );
 }

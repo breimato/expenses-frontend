@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { AnalyticsStrip } from '@/components/features/AnalyticsStrip';
 import { CategorySpendBreakdown } from '@/components/features/CategorySpendBreakdown';
 import { ExpensesByDayList } from '@/components/features/ExpensesByDayList';
-import { PeriodAveragePanel } from '@/components/features/PeriodAveragePanel';
 import { QuickAddBar } from '@/components/features/QuickAddBar';
 import { Button } from '@/components/ui/Button';
 import { StateMessage } from '@/components/ui/StateMessage';
@@ -71,9 +70,6 @@ export function HomePage() {
           referenceDate={referenceDate}
           isCurrentMonth={currentMonth}
         />
-      </div>
-      <div className={styles.homePeriodAverageOrder}>
-        <PeriodAveragePanel monthValue={monthValue} />
       </div>
       <div className={styles.homeBreakdownOrder}>
         <CategorySpendBreakdown referenceDate={referenceDate} />

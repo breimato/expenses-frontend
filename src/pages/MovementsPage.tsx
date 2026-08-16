@@ -1,11 +1,9 @@
 import { type FormEvent, useMemo, useState } from 'react';
 import type { ExpenseV1, MovementTypeV1, PatchExpenseV1Request, PostExpenseV1Request } from '@/api/generated';
 import { todayIsoDate } from '@/api/client';
-import { Amount } from '@/components/ui/Amount';
+import { ExpensesByDayList } from '@/components/features/ExpensesByDayList';
 import { Button } from '@/components/ui/Button';
-import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { DataTable } from '@/components/ui/DataTable';
 import { ErrorDialog } from '@/components/ui/ErrorDialog';
 import { AmountInput, Field, Input, Select } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
@@ -42,10 +40,6 @@ const emptyForm = (): MovementFormState => ({
   offsetsSpendingAverage: false,
   reimbursedExpenseId: '',
 });
-
-function movementTypeLabel(movementType: MovementTypeV1 | undefined): string {
-  return movementType === 'INCOME' ? 'Ingreso' : 'Gasto';
-}
 
 function expenseDateKey(expenseDate: string | Date | undefined): string {
   if (!expenseDate) {
@@ -258,43 +252,24 @@ export function MovementsPage() {
       {isLoading && <StateMessage message="Cargando movimientos…" />}
       {isError && <StateMessage message="Error al cargar movimientos" variant="error" />}
       {!isLoading && !isError && (
-        <DataTable
-          headers={['Fecha', 'Tipo', 'Concepto', 'Categoría', 'Media', 'Importe', '']}
-          alignRight={[5]}
-          hideOnMobile={[4]}
-          isEmpty={movements.length === 0}
+        <ExpensesByDayList
+          expenses={movements}
+          categoryMap={categoryMap}
           emptyMessage="No hay movimientos con estos filtros"
-        >
-          {movements.map((movement) => {
-            const category = movement.categoryId ? categoryMap.get(movement.categoryId) : undefined;
-            return (
-              <tr key={movement.id}>
-                <td>{formatDate(movement.expenseDate)}</td>
-                <td>{movementTypeLabel(movement.movementType as MovementTypeV1 | undefined)}</td>
-                <td>{movement.description}</td>
-                <td>
-                  <CategoryLabel color={category?.color} icon={category?.icon} name={category?.name} />
-                </td>
-                <td>{movement.offsetsSpendingAverage ? 'Sí' : 'No'}</td>
-                <td style={{ textAlign: 'right' }}>
-                  <Amount value={movement.amount} />
-                </td>
-                <td>
-                  <div className={styles.rowActions}>
-                    <Button size="small" onClick={() => openEdit(movement)}>
-                      Editar
-                    </Button>
-                    {movement.id && (
-                      <Button size="small" variant="danger" onClick={() => setDeleteTargetId(movement.id!)}>
-                        Borrar
-                      </Button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </DataTable>
+          showMovementType
+          renderActions={(movement) => (
+            <>
+              <Button size="small" onClick={() => openEdit(movement)}>
+                Editar
+              </Button>
+              {movement.id && (
+                <Button size="small" variant="danger" onClick={() => setDeleteTargetId(movement.id!)}>
+                  Borrar
+                </Button>
+              )}
+            </>
+          )}
+        />
       )}
 
       {modalOpen && (

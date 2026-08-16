@@ -59,6 +59,45 @@
   color: var(--color-text-muted);
 }
 
+.periodDetails {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.periodSummary {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--space-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  user-select: none;
+}
+
+.periodSummary::-webkit-details-marker {
+  display: none;
+}
+
+.periodSummary::before {
+  content: '▸ ';
+  display: inline-block;
+  transition: transform var(--transition-fast);
+}
+
+.periodDetails[open] > .periodSummary {
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.periodDetails[open] > .periodSummary::before {
+  transform: rotate(90deg);
+}
+
+.periodBody {
+  padding: var(--space-md);
+}
+
 @media (min-width: 768px) {
   .wrapper {
     gap: var(--space-md);

@@ -25,7 +25,61 @@ type ChartDatum = {
   total: number;
   color: string;
   percent: string;
+  icon?: string | null;
 };
+
+const RADIAN = Math.PI / 180;
+/** Minimum arc length (px) at mid-ring for an icon badge to fit cleanly. */
+const MIN_ICON_ARC_PX = 36;
+
+type PieIconLabelProps = {
+  cx?: number;
+  cy?: number;
+  midAngle?: number;
+  innerRadius?: number;
+  outerRadius?: number;
+  startAngle?: number;
+  endAngle?: number;
+  payload?: ChartDatum;
+};
+
+function renderPieIconLabel({
+  cx = 0,
+  cy = 0,
+  midAngle = 0,
+  innerRadius = 0,
+  outerRadius = 0,
+  startAngle = 0,
+  endAngle = 0,
+  payload,
+}: PieIconLabelProps) {
+  if (!payload?.icon) {
+    return null;
+  }
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const sweepRadians = Math.abs(endAngle - startAngle) * RADIAN;
+  const arcLength = sweepRadians * radius;
+  if (arcLength < MIN_ICON_ARC_PX) {
+    return null;
+  }
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  return (
+    <g style={{ pointerEvents: 'none' }}>
+      <circle
+        cx={x}
+        cy={y}
+        r={12}
+        fill="var(--color-surface)"
+        stroke="var(--color-border-strong)"
+        strokeWidth={1.25}
+      />
+      <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize={14}>
+        {payload.icon}
+      </text>
+    </g>
+  );
+}
 
 export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: string }) {
   const { categoryBreakdown } = useAnalytics(referenceDate);
@@ -73,6 +127,7 @@ export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: stri
     total: Number.parseFloat(item.total ?? '0'),
     color: item.categoryColor ?? '#6B7280',
     percent: item.percent ?? '0',
+    icon: item.categoryId != null ? categoryIconMap.get(item.categoryId) : undefined,
   }));
 
   return (
@@ -148,6 +203,8 @@ export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: stri
                 paddingAngle={2}
                 stroke="var(--color-surface)"
                 strokeWidth={2}
+                label={renderPieIconLabel}
+                labelLine={false}
               >
                 {chartData.map((entry) => (
                   <Cell key={entry.name} fill={entry.color} />
@@ -171,7 +228,10 @@ export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: stri
             {chartData.map((entry) => (
               <li key={entry.name} className={styles.legendItem}>
                 <span className={styles.legendSwatch} style={{ backgroundColor: entry.color }} aria-hidden />
-                <span className={styles.legendName}>{entry.name}</span>
+                <span className={styles.legendName}>
+                  {entry.icon ? `${entry.icon} ` : ''}
+                  {entry.name}
+                </span>
                 <span className={styles.legendMeta}>
                   {formatAmount(entry.total)} € · {entry.percent}%
                 </span>

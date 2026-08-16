@@ -9,6 +9,8 @@ import styles from './PeriodAveragePanel.module.css';
 
 type PeriodAveragePanelProps = {
   monthValue: string;
+  /** When false, skips the API call (e.g. collapsed disclosure). */
+  enabled?: boolean;
 };
 
 function periodAverageErrorMessage(error: unknown): string {
@@ -18,7 +20,7 @@ function periodAverageErrorMessage(error: unknown): string {
   return 'No se pudo calcular la media del periodo';
 }
 
-export function PeriodAveragePanel({ monthValue }: PeriodAveragePanelProps) {
+export function PeriodAveragePanel({ monthValue, enabled = true }: PeriodAveragePanelProps) {
   const defaults = monthBounds(monthValue);
   const [dateFrom, setDateFrom] = useState(defaults.from);
   const [dateTo, setDateTo] = useState(defaults.to);
@@ -29,17 +31,12 @@ export function PeriodAveragePanel({ monthValue }: PeriodAveragePanelProps) {
     setDateTo(nextBounds.to);
   }, [monthValue]);
 
-  const periodAverage = usePeriodAverage(dateFrom, dateTo);
+  const periodAverage = usePeriodAverage(dateFrom, dateTo, enabled);
   const result = periodAverage.data?.analyticsPeriodAverage;
   const rangeInvalid = dateFrom > dateTo;
 
   return (
-    <section className={styles.panel}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Media de gasto diaria</h2>
-        <p className={styles.lead}>Gasto medio entre dos fechas a escoger</p>
-      </div>
-
+    <div className={styles.panel}>
       <div className={styles.filters}>
         <Field label="Desde">
           <Input
@@ -60,11 +57,11 @@ export function PeriodAveragePanel({ monthValue }: PeriodAveragePanelProps) {
       </div>
 
       {rangeInvalid && <StateMessage message="La fecha de inicio no puede ser posterior a la de fin" variant="error" />}
-      {!rangeInvalid && periodAverage.isLoading && <StateMessage message="Calculando media…" />}
-      {!rangeInvalid && periodAverage.isError && (
+      {!rangeInvalid && enabled && periodAverage.isLoading && <StateMessage message="Calculando media…" />}
+      {!rangeInvalid && enabled && periodAverage.isError && (
         <StateMessage message={periodAverageErrorMessage(periodAverage.error)} variant="error" />
       )}
-      {!rangeInvalid && !periodAverage.isLoading && !periodAverage.isError && result && (
+      {!rangeInvalid && enabled && !periodAverage.isLoading && !periodAverage.isError && result && (
         <div className={styles.metrics}>
           <div className={styles.metric}>
             <span className={styles.label}>Media diaria</span>
@@ -84,6 +81,6 @@ export function PeriodAveragePanel({ monthValue }: PeriodAveragePanelProps) {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }

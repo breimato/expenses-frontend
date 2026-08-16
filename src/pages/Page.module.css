@@ -16,16 +16,12 @@
   order: 3;
 }
 
-.homePeriodAverageOrder {
+.homeBreakdownOrder {
   order: 4;
 }
 
-.homeBreakdownOrder {
-  order: 5;
-}
-
 .homeLatestOrder {
-  order: 6;
+  order: 5;
 }
 
 .homeIntro h1 {
@@ -174,7 +170,6 @@
   .homeIntroOrder,
   .homeQuickAddOrder,
   .homeAnalyticsOrder,
-  .homePeriodAverageOrder,
   .homeBreakdownOrder,
   .homeLatestOrder {
     order: initial;

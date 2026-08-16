@@ -2,27 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.title {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.lead {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
 }
 
 .filters {
@@ -38,10 +17,10 @@
 }
 
 .metric {
-  padding: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
 }
 
 .label {
@@ -70,15 +49,7 @@
 }
 
 @media (min-width: 768px) {
-  .panel {
-    margin-bottom: var(--space-xl);
-  }
-
-  .metrics {
-    gap: var(--space-md);
-  }
-
   .value {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 }

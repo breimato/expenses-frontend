@@ -44,6 +44,9 @@ export function groupExpensesByDay(expenses: ExpenseV1[]): ExpenseDayGroup[] {
     .map(([dateKey, dayExpenses]) => ({
       dateKey,
       expenses: dayExpenses,
-      total: dayExpenses.reduce((sum, expense) => sum + parseAmount(expense.amount), 0),
+      total: dayExpenses.reduce((sum, expense) => {
+        const amount = parseAmount(expense.amount);
+        return expense.movementType === 'INCOME' ? sum - amount : sum + amount;
+      }, 0),
     }));
 }

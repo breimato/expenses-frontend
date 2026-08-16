@@ -3,7 +3,7 @@ import { getAnalyticsPeriodAverageApi } from '@/api/client';
 import { queryKeys } from '@/api/queryKeys';
 import { useAuth } from '@/context/AuthContext';
 
-export function usePeriodAverage(dateFrom: string, dateTo: string) {
+export function usePeriodAverage(dateFrom: string, dateTo: string, enabled = true) {
   const { user } = useAuth();
   const userId = user?.id;
   const rangeValid = Boolean(dateFrom && dateTo && dateFrom <= dateTo);
@@ -17,6 +17,6 @@ export function usePeriodAverage(dateFrom: string, dateTo: string) {
           dateTo: new Date(`${dateTo}T12:00:00`),
         },
       }),
-    enabled: Boolean(userId) && rangeValid,
+    enabled: enabled && Boolean(userId) && rangeValid,
   });
 }
