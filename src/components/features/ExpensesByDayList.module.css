@@ -127,13 +127,21 @@
 @media (max-width: 767px) {
   .dayHeader,
   .row {
-    grid-template-columns: minmax(0, 1fr) 7.5rem 4.75rem;
+    grid-template-columns: minmax(0, 1fr) 2rem 4.75rem;
     column-gap: var(--space-sm);
   }
 
   .dayHeaderWithType,
   .rowWithType {
-    grid-template-columns: 4.5rem minmax(0, 1fr) 7.5rem 4.75rem;
+    grid-template-columns: 4.5rem minmax(0, 1fr) 2rem 4.75rem;
+  }
+
+  .category :global(.name) {
+    display: none;
+  }
+
+  .category :global(.label) {
+    gap: 0;
   }
 
   .rowWithType .rowActions {
