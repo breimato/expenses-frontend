@@ -19,6 +19,12 @@ export function monthBounds(monthValue: string): { from: string; to: string } {
   return { from, to: lastDay > today ? today : lastDay };
 }
 
+export function daysRemainingInMonthAfter(isoDate: string): number {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  const lastDay = new Date(year, month, 0).getDate();
+  return Math.max(0, lastDay - day);
+}
+
 export function referenceDateForMonth(monthValue: string): string {
   return monthBounds(monthValue).to;
 }

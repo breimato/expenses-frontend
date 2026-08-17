@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { todayIsoDate } from '@/api/client';
 import { ResponseError } from '@/api/generated/runtime';
 import { Amount } from '@/components/ui/Amount';
 import { Field, Input } from '@/components/ui/Input';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { usePeriodAverage } from '@/hooks/usePeriodAverage';
-import { monthBounds } from '@/utils/month';
+import { useProfile } from '@/hooks/useProfile';
+import { daysRemainingInMonthAfter, isCurrentMonth, monthBounds } from '@/utils/month';
 import styles from './PeriodAveragePanel.module.css';
 
 type PeriodAveragePanelProps = {
@@ -20,6 +22,23 @@ function periodAverageErrorMessage(error: unknown): string {
   return 'No se pudo calcular la media del periodo';
 }
 
+function projectedEndOfMonthBalance(
+  balance: string | undefined,
+  dailyAverage: string | undefined,
+  remainingDays: number,
+): string | undefined {
+  if (balance == null || dailyAverage == null) {
+    return undefined;
+  }
+  const currentBalance = Number.parseFloat(balance);
+  const average = Number.parseFloat(dailyAverage);
+  if (Number.isNaN(currentBalance) || Number.isNaN(average)) {
+    return undefined;
+  }
+  const projected = currentBalance - average * remainingDays;
+  return (Math.round(projected * 100) / 100).toFixed(2);
+}
+
 export function PeriodAveragePanel({ monthValue, enabled = true }: PeriodAveragePanelProps) {
   const defaults = monthBounds(monthValue);
   const [dateFrom, setDateFrom] = useState(defaults.from);
@@ -32,8 +51,13 @@ export function PeriodAveragePanel({ monthValue, enabled = true }: PeriodAverage
   }, [monthValue]);
 
   const periodAverage = usePeriodAverage(dateFrom, dateTo, enabled);
+  const profile = useProfile();
   const result = periodAverage.data?.analyticsPeriodAverage;
   const rangeInvalid = dateFrom > dateTo;
+  const remainingDays = isCurrentMonth(monthValue) ? daysRemainingInMonthAfter(todayIsoDate()) : 0;
+  const projectedBalance = isCurrentMonth(monthValue)
+    ? projectedEndOfMonthBalance(profile.data?.profile?.balance, result?.dailyAverage, remainingDays)
+    : undefined;
 
   return (
     <div className={styles.panel}>
@@ -79,6 +103,19 @@ export function PeriodAveragePanel({ monthValue, enabled = true }: PeriodAverage
             <span className={styles.label}>Días</span>
             <span className={styles.value}>{result.daysInPeriod ?? '—'}</span>
           </div>
+          {projectedBalance !== undefined && (
+            <div className={`${styles.metric} ${styles.estimate}`}>
+              <span className={styles.label}>Estimación de dinero a final de mes</span>
+              <span className={styles.value}>
+                <Amount value={projectedBalance} />
+              </span>
+              <span className={styles.sub}>
+                {remainingDays > 0
+                  ? `saldo actual − ${remainingDays} días a esta media`
+                  : 'no quedan días este mes'}
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>
