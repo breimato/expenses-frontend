@@ -73,7 +73,12 @@ export function ExpensesByDayList({
                   )}
                   <span className={styles.description}>{expense.description}</span>
                   <span className={styles.category}>
-                    <CategoryLabel color={category?.color} icon={category?.icon} name={category?.name} />
+                    <CategoryLabel
+                      color={category?.color}
+                      icon={category?.icon}
+                      name={category?.name}
+                      hideNameOnMobile
+                    />
                   </span>
                   <Amount value={expense.amount} className={styles.rowAmount} />
                   {renderActions ? <div className={styles.rowActions}>{renderActions(expense)}</div> : null}

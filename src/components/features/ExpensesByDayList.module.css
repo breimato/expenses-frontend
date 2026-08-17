@@ -136,14 +136,6 @@
     grid-template-columns: 4.5rem minmax(0, 1fr) 2rem 4.75rem;
   }
 
-  .category :global(.name) {
-    display: none;
-  }
-
-  .category :global(.label) {
-    gap: 0;
-  }
-
   .rowWithType .rowActions {
     grid-column: 1 / -1;
     justify-content: flex-end;
