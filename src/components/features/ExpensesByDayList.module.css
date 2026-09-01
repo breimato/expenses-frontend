@@ -5,6 +5,9 @@
   max-height: min(70vh, 40rem);
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+  --movements-type-col: 7.5rem;
+  --movements-category-col: 7.5rem;
+  --movements-amount-col: 6.5rem;
 }
 
 .daySection {
@@ -16,14 +19,19 @@
 .dayHeader,
 .row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 10rem 5.5rem;
+  grid-template-columns: minmax(0, 1fr) var(--movements-category-col) var(--movements-amount-col);
   align-items: center;
   column-gap: var(--space-md);
 }
 
 .dayHeaderWithType,
 .rowWithType {
-  grid-template-columns: 5.5rem minmax(0, 1fr) 10rem 5.5rem auto;
+  grid-template-columns:
+    var(--movements-type-col)
+    minmax(0, 1fr)
+    var(--movements-category-col)
+    var(--movements-amount-col)
+    auto;
 }
 
 .dayHeader {
@@ -85,8 +93,22 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.movementTransfer {
+  color: var(--color-secondary);
+}
+
+.movementIncome {
+  color: var(--color-success, #15803d);
+}
+
+.movementExpense {
+  color: var(--color-text-muted);
+}
+
+.rowAmountIncome {
+  color: var(--color-success, #15803d);
 }
 
 .description {
@@ -125,15 +147,15 @@
 }
 
 @media (max-width: 767px) {
-  .dayHeader,
-  .row {
-    grid-template-columns: minmax(0, 1fr) 2rem 4.75rem;
-    column-gap: var(--space-sm);
+  .list {
+    --movements-type-col: 7rem;
+    --movements-category-col: 2.5rem;
+    --movements-amount-col: 5.5rem;
   }
 
-  .dayHeaderWithType,
-  .rowWithType {
-    grid-template-columns: 4.5rem minmax(0, 1fr) 2rem 4.75rem;
+  .dayHeader,
+  .row {
+    column-gap: var(--space-sm);
   }
 
   .rowWithType .rowActions {

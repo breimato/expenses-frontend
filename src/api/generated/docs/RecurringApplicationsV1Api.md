@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## postRecurringTemplatesApplyPendingV1
 
-> PostRecurringTemplatesApplyPendingV1Response postRecurringTemplatesApplyPendingV1()
+> PostRecurringTemplatesApplyPendingV1Response postRecurringTemplatesApplyPendingV1(accountId)
 
 Post Recurring Applications V1
 
@@ -33,8 +33,13 @@ async function example() {
   });
   const api = new RecurringApplicationsV1Api(config);
 
+  const body = {
+    // number | Account id query parameter
+    accountId: 56,
+  } satisfies PostRecurringTemplatesApplyPendingV1Request;
+
   try {
-    const data = await api.postRecurringTemplatesApplyPendingV1();
+    const data = await api.postRecurringTemplatesApplyPendingV1(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -47,7 +52,10 @@ example().catch(console.error);
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 
 ### Return type
 

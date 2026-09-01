@@ -20,6 +20,12 @@ import { mapValues } from '../runtime';
  */
 export interface GetAnalyticsProjectionsV1Request {
     /**
+     * Account identifier
+     * @type {number}
+     * @memberof GetAnalyticsProjectionsV1Request
+     */
+    accountId: number;
+    /**
      * Reference date for projections calculation
      * @type {Date}
      * @memberof GetAnalyticsProjectionsV1Request
@@ -31,6 +37,7 @@ export interface GetAnalyticsProjectionsV1Request {
  * Check if a given object implements the GetAnalyticsProjectionsV1Request interface.
  */
 export function instanceOfGetAnalyticsProjectionsV1Request(value: object): value is GetAnalyticsProjectionsV1Request {
+    if (!('accountId' in value) || value['accountId'] === undefined) return false;
     if (!('referenceDate' in value) || value['referenceDate'] === undefined) return false;
     return true;
 }
@@ -45,6 +52,7 @@ export function GetAnalyticsProjectionsV1RequestFromJSONTyped(json: any, ignoreD
     }
     return {
         
+        'accountId': json['accountId'],
         'referenceDate': (new Date(json['referenceDate'])),
     };
 }
@@ -60,6 +68,7 @@ export function GetAnalyticsProjectionsV1RequestToJSONTyped(value?: GetAnalytics
 
     return {
         
+        'accountId': value['accountId'],
         'referenceDate': value['referenceDate'].toISOString().substring(0,10),
     };
 }

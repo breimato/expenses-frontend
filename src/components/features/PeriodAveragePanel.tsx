@@ -5,7 +5,7 @@ import { Amount } from '@/components/ui/Amount';
 import { Field, Input } from '@/components/ui/Input';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { usePeriodAverage } from '@/hooks/usePeriodAverage';
-import { useProfile } from '@/hooks/useProfile';
+import { useAccountContext } from '@/context/AccountContext';
 import { daysRemainingInMonthAfter, isCurrentMonth, monthBounds } from '@/utils/month';
 import styles from './PeriodAveragePanel.module.css';
 
@@ -51,12 +51,12 @@ export function PeriodAveragePanel({ monthValue, enabled = true }: PeriodAverage
   }, [monthValue]);
 
   const periodAverage = usePeriodAverage(dateFrom, dateTo, enabled);
-  const profile = useProfile();
+  const { activeAccount } = useAccountContext();
   const result = periodAverage.data?.analyticsPeriodAverage;
   const rangeInvalid = dateFrom > dateTo;
   const remainingDays = isCurrentMonth(monthValue) ? daysRemainingInMonthAfter(todayIsoDate()) : 0;
   const projectedBalance = isCurrentMonth(monthValue)
-    ? projectedEndOfMonthBalance(profile.data?.profile?.balance, result?.dailyAverage, remainingDays)
+    ? projectedEndOfMonthBalance(activeAccount?.balance, result?.dailyAverage, remainingDays)
     : undefined;
 
   return (

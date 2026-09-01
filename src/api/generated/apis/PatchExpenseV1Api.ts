@@ -30,6 +30,7 @@ import {
 } from '../models/PatchExpenseV1Request';
 
 export interface PatchExpenseV1OperationRequest {
+    accountId: number;
     id: number;
     patchExpenseV1Request: PatchExpenseV1Request;
 }
@@ -43,6 +44,13 @@ export class PatchExpenseV1Api extends runtime.BaseAPI {
      * Creates request options for patchExpenseV1 without sending the request
      */
     async patchExpenseV1RequestOpts(requestParameters: PatchExpenseV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling patchExpenseV1().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -58,6 +66,10 @@ export class PatchExpenseV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

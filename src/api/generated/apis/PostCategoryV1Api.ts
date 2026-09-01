@@ -30,6 +30,7 @@ import {
 } from '../models/PostCategoryV1Request';
 
 export interface PostCategoryV1OperationRequest {
+    accountId: number;
     postCategoryV1Request: PostCategoryV1Request;
 }
 
@@ -42,6 +43,13 @@ export class PostCategoryV1Api extends runtime.BaseAPI {
      * Creates request options for postCategoryV1 without sending the request
      */
     async postCategoryV1RequestOpts(requestParameters: PostCategoryV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling postCategoryV1().'
+            );
+        }
+
         if (requestParameters['postCategoryV1Request'] == null) {
             throw new runtime.RequiredError(
                 'postCategoryV1Request',
@@ -50,6 +58,10 @@ export class PostCategoryV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

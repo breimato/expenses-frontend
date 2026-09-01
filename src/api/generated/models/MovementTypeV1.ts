@@ -19,7 +19,9 @@
  */
 export const MovementTypeV1 = {
     Expense: 'EXPENSE',
-    Income: 'INCOME'
+    Income: 'INCOME',
+    TransferOut: 'TRANSFER_OUT',
+    TransferIn: 'TRANSFER_IN'
 } as const;
 export type MovementTypeV1 = typeof MovementTypeV1[keyof typeof MovementTypeV1];
 

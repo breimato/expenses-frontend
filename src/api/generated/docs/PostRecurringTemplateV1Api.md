@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## postRecurringTemplateV1
 
-> RecurringTemplateV1Response postRecurringTemplateV1(postRecurringTemplateV1Request)
+> RecurringTemplateV1Response postRecurringTemplateV1(accountId, postRecurringTemplateV1Request)
 
 Post Recurring Template V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new PostRecurringTemplateV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // PostRecurringTemplateV1Request
     postRecurringTemplateV1Request: ...,
   } satisfies PostRecurringTemplateV1OperationRequest;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **postRecurringTemplateV1Request** | [PostRecurringTemplateV1Request](PostRecurringTemplateV1Request.md) |  | |
 
 ### Return type

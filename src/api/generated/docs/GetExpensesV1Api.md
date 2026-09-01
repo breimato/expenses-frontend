@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## getExpensesV1
 
-> GetExpensesV1Response getExpensesV1(categoryId, expenseDate, description, movementType)
+> GetExpensesV1Response getExpensesV1(accountId, categoryId, expenseDate, description, movementType)
 
 Get Expenses V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new GetExpensesV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number (optional)
     categoryId: 56,
     // Date (optional)
@@ -61,10 +63,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **categoryId** | `number` |  | [Optional] [Defaults to `undefined`] |
 | **expenseDate** | `Date` |  | [Optional] [Defaults to `undefined`] |
 | **description** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **movementType** | `MovementTypeV1` |  | [Optional] [Defaults to `undefined`] [Enum: EXPENSE, INCOME] |
+| **movementType** | `MovementTypeV1` |  | [Optional] [Defaults to `undefined`] [Enum: EXPENSE, INCOME, TRANSFER_OUT, TRANSFER_IN] |
 
 ### Return type
 

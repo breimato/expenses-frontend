@@ -30,6 +30,7 @@ import {
 } from '../models/RecurringTemplateV1Response';
 
 export interface PostRecurringTemplateV1OperationRequest {
+    accountId: number;
     postRecurringTemplateV1Request: PostRecurringTemplateV1Request;
 }
 
@@ -42,6 +43,13 @@ export class PostRecurringTemplateV1Api extends runtime.BaseAPI {
      * Creates request options for postRecurringTemplateV1 without sending the request
      */
     async postRecurringTemplateV1RequestOpts(requestParameters: PostRecurringTemplateV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling postRecurringTemplateV1().'
+            );
+        }
+
         if (requestParameters['postRecurringTemplateV1Request'] == null) {
             throw new runtime.RequiredError(
                 'postRecurringTemplateV1Request',
@@ -50,6 +58,10 @@ export class PostRecurringTemplateV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

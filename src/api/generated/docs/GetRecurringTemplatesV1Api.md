@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## getRecurringTemplatesV1
 
-> GetRecurringTemplatesV1Response getRecurringTemplatesV1(categoryId)
+> GetRecurringTemplatesV1Response getRecurringTemplatesV1(accountId, categoryId)
 
 Get Recurring Templates V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new GetRecurringTemplatesV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number (optional)
     categoryId: 56,
   } satisfies GetRecurringTemplatesV1Request;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **categoryId** | `number` |  | [Optional] [Defaults to `undefined`] |
 
 ### Return type

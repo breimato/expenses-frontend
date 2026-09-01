@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## deleteRecurringTemplateV1
 
-> deleteRecurringTemplateV1(id)
+> deleteRecurringTemplateV1(accountId, id)
 
 Delete Recurring Template V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new DeleteRecurringTemplateV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Recurring template identifier
     id: 56,
   } satisfies DeleteRecurringTemplateV1Request;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Recurring template identifier | [Defaults to `undefined`] |
 
 ### Return type

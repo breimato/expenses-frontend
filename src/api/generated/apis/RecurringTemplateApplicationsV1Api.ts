@@ -30,6 +30,7 @@ import {
 } from '../models/PostRecurringTemplateQuickAddV1Request';
 
 export interface PostRecurringTemplateQuickAddV1OperationRequest {
+    accountId: number;
     id: number;
     postRecurringTemplateQuickAddV1Request?: PostRecurringTemplateQuickAddV1Request;
 }
@@ -43,6 +44,13 @@ export class RecurringTemplateApplicationsV1Api extends runtime.BaseAPI {
      * Creates request options for postRecurringTemplateQuickAddV1 without sending the request
      */
     async postRecurringTemplateQuickAddV1RequestOpts(requestParameters: PostRecurringTemplateQuickAddV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling postRecurringTemplateQuickAddV1().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -51,6 +59,10 @@ export class RecurringTemplateApplicationsV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

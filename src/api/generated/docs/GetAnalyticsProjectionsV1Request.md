@@ -7,6 +7,7 @@ Get Analytics Projections V1 Request
 
 Name | Type
 ------------ | -------------
+`accountId` | number
 `referenceDate` | Date
 
 ## Example
@@ -16,6 +17,7 @@ import type { GetAnalyticsProjectionsV1Request } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "accountId": null,
   "referenceDate": null,
 } satisfies GetAnalyticsProjectionsV1Request
 

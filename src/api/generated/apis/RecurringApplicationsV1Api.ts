@@ -24,6 +24,10 @@ import {
     PostRecurringTemplatesApplyPendingV1ResponseToJSON,
 } from '../models/PostRecurringTemplatesApplyPendingV1Response';
 
+export interface PostRecurringTemplatesApplyPendingV1Request {
+    accountId: number;
+}
+
 /**
  * 
  */
@@ -32,8 +36,19 @@ export class RecurringApplicationsV1Api extends runtime.BaseAPI {
     /**
      * Creates request options for postRecurringTemplatesApplyPendingV1 without sending the request
      */
-    async postRecurringTemplatesApplyPendingV1RequestOpts(): Promise<runtime.RequestOpts> {
+    async postRecurringTemplatesApplyPendingV1RequestOpts(requestParameters: PostRecurringTemplatesApplyPendingV1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling postRecurringTemplatesApplyPendingV1().'
+            );
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -60,8 +75,8 @@ export class RecurringApplicationsV1Api extends runtime.BaseAPI {
      * Catch up auto-apply templates scheduled on or before today that were not applied yet this period
      * Post Recurring Applications V1
      */
-    async postRecurringTemplatesApplyPendingV1Raw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostRecurringTemplatesApplyPendingV1Response>> {
-        const requestOptions = await this.postRecurringTemplatesApplyPendingV1RequestOpts();
+    async postRecurringTemplatesApplyPendingV1Raw(requestParameters: PostRecurringTemplatesApplyPendingV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostRecurringTemplatesApplyPendingV1Response>> {
+        const requestOptions = await this.postRecurringTemplatesApplyPendingV1RequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PostRecurringTemplatesApplyPendingV1ResponseFromJSON(jsonValue));
@@ -71,8 +86,8 @@ export class RecurringApplicationsV1Api extends runtime.BaseAPI {
      * Catch up auto-apply templates scheduled on or before today that were not applied yet this period
      * Post Recurring Applications V1
      */
-    async postRecurringTemplatesApplyPendingV1(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostRecurringTemplatesApplyPendingV1Response> {
-        const response = await this.postRecurringTemplatesApplyPendingV1Raw(initOverrides);
+    async postRecurringTemplatesApplyPendingV1(requestParameters: PostRecurringTemplatesApplyPendingV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostRecurringTemplatesApplyPendingV1Response> {
+        const response = await this.postRecurringTemplatesApplyPendingV1Raw(requestParameters, initOverrides);
         return await response.value();
     }
 

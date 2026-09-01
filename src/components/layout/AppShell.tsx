@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import { AccountBar } from '@/components/features/AccountBar';
 import { ThemeToggle } from '@/components/features/ThemeToggle';
 import { FinanceNav } from '@/components/ui/FinanceNav';
 import { BottomNav } from './BottomNav';
@@ -19,6 +20,7 @@ export function AppShell() {
           <UserSession />
         </div>
       </header>
+      <AccountBar />
       <div className={styles.sectionNav}>
         <SectionNav />
       </div>

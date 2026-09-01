@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## patchRecurringTemplateV1
 
-> RecurringTemplateV1Response patchRecurringTemplateV1(id, patchRecurringTemplateV1Request)
+> RecurringTemplateV1Response patchRecurringTemplateV1(accountId, id, patchRecurringTemplateV1Request)
 
 Patch Recurring Template V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new PatchRecurringTemplateV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Recurring template identifier
     id: 56,
     // PatchRecurringTemplateV1Request
@@ -57,6 +59,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Recurring template identifier | [Defaults to `undefined`] |
 | **patchRecurringTemplateV1Request** | [PatchRecurringTemplateV1Request](PatchRecurringTemplateV1Request.md) |  | |
 

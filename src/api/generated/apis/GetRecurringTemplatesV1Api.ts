@@ -25,6 +25,7 @@ import {
 } from '../models/GetRecurringTemplatesV1Response';
 
 export interface GetRecurringTemplatesV1Request {
+    accountId: number;
     categoryId?: number;
 }
 
@@ -37,7 +38,18 @@ export class GetRecurringTemplatesV1Api extends runtime.BaseAPI {
      * Creates request options for getRecurringTemplatesV1 without sending the request
      */
     async getRecurringTemplatesV1RequestOpts(requestParameters: GetRecurringTemplatesV1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling getRecurringTemplatesV1().'
+            );
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         if (requestParameters['categoryId'] != null) {
             queryParameters['categoryId'] = requestParameters['categoryId'];
@@ -79,7 +91,7 @@ export class GetRecurringTemplatesV1Api extends runtime.BaseAPI {
      * Get all recurring templates, optionally filtered by search criteria
      * Get Recurring Templates V1
      */
-    async getRecurringTemplatesV1(requestParameters: GetRecurringTemplatesV1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetRecurringTemplatesV1Response> {
+    async getRecurringTemplatesV1(requestParameters: GetRecurringTemplatesV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetRecurringTemplatesV1Response> {
         const response = await this.getRecurringTemplatesV1Raw(requestParameters, initOverrides);
         return await response.value();
     }

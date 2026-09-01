@@ -6,9 +6,9 @@ import { QuickAddBar } from '@/components/features/QuickAddBar';
 import { Button } from '@/components/ui/Button';
 import { StateMessage } from '@/components/ui/StateMessage';
 import { todayIsoDate } from '@/api/client';
+import { useAuth } from '@/context/AuthContext';
 import { useCategories } from '@/hooks/useCategories';
 import { useExpenses } from '@/hooks/useExpenses';
-import { useProfile } from '@/hooks/useProfile';
 import {
   expenseInMonth,
   formatMonthLabel,
@@ -24,7 +24,7 @@ export function HomePage() {
   const referenceDate = referenceDateForMonth(monthValue);
   const currentMonth = checkIsCurrentMonth(monthValue);
 
-  const profile = useProfile();
+  const { user } = useAuth();
   const { data, isLoading, isError } = useExpenses({ movementType: 'EXPENSE' });
   const { data: categoriesData } = useCategories();
   const categories = categoriesData?.categories ?? [];
@@ -39,7 +39,7 @@ export function HomePage() {
   return (
     <div className={styles.page}>
       <header className={`${styles.homeIntro} ${styles.homeIntroOrder}`}>
-        <h1>Hola{profile.data?.profile?.displayName ? `, ${profile.data.profile.displayName}` : ''}</h1>
+        <h1>Hola{user?.displayName ? `, ${user.displayName}` : ''}</h1>
         <p className={styles.lead}>
           {currentMonth ? 'Tu cuaderno de gastos de este mes' : `Cuaderno de ${formatMonthLabel(monthValue)}`}
         </p>

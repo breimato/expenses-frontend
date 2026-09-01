@@ -3,18 +3,21 @@ import {
   DeleteCategoryV1Api,
   DeleteExpenseV1Api,
   DeleteRecurringTemplateV1Api,
+  GetAccountV1Api,
+  GetAccountsV1Api,
   GetAnalyticsAveragesV1Api,
   GetAnalyticsCategoryBreakdownV1Api,
   GetAnalyticsPeriodAverageV1Api,
   GetAnalyticsProjectionsV1Api,
   GetCategoriesV1Api,
   GetExpensesV1Api,
-  GetProfileV1Api,
   GetRecurringTemplatesV1Api,
+  PatchAccountV1Api,
   PatchCategoryV1Api,
   PatchExpenseV1Api,
-  PatchProfileV1Api,
   PatchRecurringTemplateV1Api,
+  PostAccountTransferV1Api,
+  PostAccountV1Api,
   PostAuthLoginV1Api,
   PostAuthRegisterV1Api,
   PostCategoryV1Api,
@@ -41,6 +44,12 @@ let config = createConfiguration();
 export let postAuthRegisterApi = new PostAuthRegisterV1Api(config);
 export let postAuthLoginApi = new PostAuthLoginV1Api(config);
 
+export let getAccountsApi = new GetAccountsV1Api(config);
+export let getAccountApi = new GetAccountV1Api(config);
+export let postAccountApi = new PostAccountV1Api(config);
+export let patchAccountApi = new PatchAccountV1Api(config);
+export let postAccountTransferApi = new PostAccountTransferV1Api(config);
+
 export let getCategoriesApi = new GetCategoriesV1Api(config);
 export let postCategoryApi = new PostCategoryV1Api(config);
 export let patchCategoryApi = new PatchCategoryV1Api(config);
@@ -58,9 +67,6 @@ export let deleteRecurringTemplateApi = new DeleteRecurringTemplateV1Api(config)
 export let postRecurringTemplateQuickAddApi = new RecurringTemplateApplicationsV1Api(config);
 export let postRecurringTemplatesApplyPendingApi = new RecurringApplicationsV1Api(config);
 
-export let getProfileApi = new GetProfileV1Api(config);
-export let patchProfileApi = new PatchProfileV1Api(config);
-
 export let getAnalyticsAveragesApi = new GetAnalyticsAveragesV1Api(config);
 export let getAnalyticsCategoryBreakdownApi = new GetAnalyticsCategoryBreakdownV1Api(config);
 export let getAnalyticsPeriodAverageApi = new GetAnalyticsPeriodAverageV1Api(config);
@@ -71,6 +77,11 @@ export function initApiClient(): void {
   config = createConfiguration();
   postAuthRegisterApi = new PostAuthRegisterV1Api(config);
   postAuthLoginApi = new PostAuthLoginV1Api(config);
+  getAccountsApi = new GetAccountsV1Api(config);
+  getAccountApi = new GetAccountV1Api(config);
+  postAccountApi = new PostAccountV1Api(config);
+  patchAccountApi = new PatchAccountV1Api(config);
+  postAccountTransferApi = new PostAccountTransferV1Api(config);
   getCategoriesApi = new GetCategoriesV1Api(config);
   postCategoryApi = new PostCategoryV1Api(config);
   patchCategoryApi = new PatchCategoryV1Api(config);
@@ -85,8 +96,6 @@ export function initApiClient(): void {
   deleteRecurringTemplateApi = new DeleteRecurringTemplateV1Api(config);
   postRecurringTemplateQuickAddApi = new RecurringTemplateApplicationsV1Api(config);
   postRecurringTemplatesApplyPendingApi = new RecurringApplicationsV1Api(config);
-  getProfileApi = new GetProfileV1Api(config);
-  patchProfileApi = new PatchProfileV1Api(config);
   getAnalyticsAveragesApi = new GetAnalyticsAveragesV1Api(config);
   getAnalyticsCategoryBreakdownApi = new GetAnalyticsCategoryBreakdownV1Api(config);
   getAnalyticsPeriodAverageApi = new GetAnalyticsPeriodAverageV1Api(config);

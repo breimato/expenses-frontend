@@ -20,6 +20,7 @@ import {
 } from '../models/ApiErrorV1';
 
 export interface DeleteRecurringTemplateV1Request {
+    accountId: number;
     id: number;
 }
 
@@ -32,6 +33,13 @@ export class DeleteRecurringTemplateV1Api extends runtime.BaseAPI {
      * Creates request options for deleteRecurringTemplateV1 without sending the request
      */
     async deleteRecurringTemplateV1RequestOpts(requestParameters: DeleteRecurringTemplateV1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling deleteRecurringTemplateV1().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -40,6 +48,10 @@ export class DeleteRecurringTemplateV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

@@ -20,6 +20,12 @@ import { mapValues } from '../runtime';
  */
 export interface GetAnalyticsPeriodAverageV1Request {
     /**
+     * Account identifier
+     * @type {number}
+     * @memberof GetAnalyticsPeriodAverageV1Request
+     */
+    accountId: number;
+    /**
      * Inclusive start date of the average period
      * @type {Date}
      * @memberof GetAnalyticsPeriodAverageV1Request
@@ -37,6 +43,7 @@ export interface GetAnalyticsPeriodAverageV1Request {
  * Check if a given object implements the GetAnalyticsPeriodAverageV1Request interface.
  */
 export function instanceOfGetAnalyticsPeriodAverageV1Request(value: object): value is GetAnalyticsPeriodAverageV1Request {
+    if (!('accountId' in value) || value['accountId'] === undefined) return false;
     if (!('dateFrom' in value) || value['dateFrom'] === undefined) return false;
     if (!('dateTo' in value) || value['dateTo'] === undefined) return false;
     return true;
@@ -52,6 +59,7 @@ export function GetAnalyticsPeriodAverageV1RequestFromJSONTyped(json: any, ignor
     }
     return {
         
+        'accountId': json['accountId'],
         'dateFrom': (new Date(json['dateFrom'])),
         'dateTo': (new Date(json['dateTo'])),
     };
@@ -68,6 +76,7 @@ export function GetAnalyticsPeriodAverageV1RequestToJSONTyped(value?: GetAnalyti
 
     return {
         
+        'accountId': value['accountId'],
         'dateFrom': value['dateFrom'].toISOString().substring(0,10),
         'dateTo': value['dateTo'].toISOString().substring(0,10),
     };

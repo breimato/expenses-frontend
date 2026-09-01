@@ -30,6 +30,7 @@ import {
 } from '../models/RecurringTemplateV1Response';
 
 export interface PatchRecurringTemplateV1OperationRequest {
+    accountId: number;
     id: number;
     patchRecurringTemplateV1Request: PatchRecurringTemplateV1Request;
 }
@@ -43,6 +44,13 @@ export class PatchRecurringTemplateV1Api extends runtime.BaseAPI {
      * Creates request options for patchRecurringTemplateV1 without sending the request
      */
     async patchRecurringTemplateV1RequestOpts(requestParameters: PatchRecurringTemplateV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling patchRecurringTemplateV1().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -58,6 +66,10 @@ export class PatchRecurringTemplateV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

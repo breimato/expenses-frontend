@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## postRecurringTemplateQuickAddV1
 
-> ExpenseV1Response postRecurringTemplateQuickAddV1(id, postRecurringTemplateQuickAddV1Request)
+> ExpenseV1Response postRecurringTemplateQuickAddV1(accountId, id, postRecurringTemplateQuickAddV1Request)
 
 Post Recurring Template Application V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new RecurringTemplateApplicationsV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Recurring template identifier
     id: 56,
     // PostRecurringTemplateQuickAddV1Request (optional)
@@ -57,6 +59,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Recurring template identifier | [Defaults to `undefined`] |
 | **postRecurringTemplateQuickAddV1Request** | [PostRecurringTemplateQuickAddV1Request](PostRecurringTemplateQuickAddV1Request.md) |  | [Optional] |
 

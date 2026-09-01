@@ -30,6 +30,7 @@ import {
 } from '../models/MovementTypeV1';
 
 export interface GetExpensesV1Request {
+    accountId: number;
     categoryId?: number;
     expenseDate?: Date;
     description?: string;
@@ -45,7 +46,18 @@ export class GetExpensesV1Api extends runtime.BaseAPI {
      * Creates request options for getExpensesV1 without sending the request
      */
     async getExpensesV1RequestOpts(requestParameters: GetExpensesV1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling getExpensesV1().'
+            );
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         if (requestParameters['categoryId'] != null) {
             queryParameters['categoryId'] = requestParameters['categoryId'];
@@ -99,7 +111,7 @@ export class GetExpensesV1Api extends runtime.BaseAPI {
      * Get all expenses, optionally filtered by search criteria
      * Get Expenses V1
      */
-    async getExpensesV1(requestParameters: GetExpensesV1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetExpensesV1Response> {
+    async getExpensesV1(requestParameters: GetExpensesV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetExpensesV1Response> {
         const response = await this.getExpensesV1Raw(requestParameters, initOverrides);
         return await response.value();
     }

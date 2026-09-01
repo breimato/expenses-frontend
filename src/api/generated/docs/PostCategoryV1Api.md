@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## postCategoryV1
 
-> CategoryV1Response postCategoryV1(postCategoryV1Request)
+> CategoryV1Response postCategoryV1(accountId, postCategoryV1Request)
 
 Post Category V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new PostCategoryV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // PostCategoryV1Request
     postCategoryV1Request: ...,
   } satisfies PostCategoryV1OperationRequest;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **postCategoryV1Request** | [PostCategoryV1Request](PostCategoryV1Request.md) |  | |
 
 ### Return type

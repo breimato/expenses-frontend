@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## getCategoriesV1
 
-> GetCategoriesV1Response getCategoriesV1(id, name, movementType)
+> GetCategoriesV1Response getCategoriesV1(accountId, id, name, movementType)
 
 Get Categories V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new GetCategoriesV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number (optional)
     id: 56,
     // string (optional)
@@ -59,9 +61,10 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` |  | [Optional] [Defaults to `undefined`] |
 | **name** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **movementType** | `MovementTypeV1` |  | [Optional] [Defaults to `undefined`] [Enum: EXPENSE, INCOME] |
+| **movementType** | `MovementTypeV1` |  | [Optional] [Defaults to `undefined`] [Enum: EXPENSE, INCOME, TRANSFER_OUT, TRANSFER_IN] |
 
 ### Return type
 

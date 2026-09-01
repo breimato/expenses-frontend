@@ -6,6 +6,7 @@ import {
   todayIsoDate,
 } from '@/api/client';
 import { queryKeys } from '@/api/queryKeys';
+import { useActiveAccountId } from '@/context/AccountContext';
 import { useAuth } from '@/context/AuthContext';
 
 export function useAnalytics(
@@ -13,35 +14,36 @@ export function useAnalytics(
   options: { includeProjections?: boolean } = {},
 ) {
   const { user } = useAuth();
+  const activeAccountId = useActiveAccountId();
   const userId = user?.id;
   // Noon local avoids UTC day shift when serializing to ISO date string.
   const date = new Date(`${referenceDate}T12:00:00`);
-  const enabled = Boolean(userId);
+  const enabled = Boolean(userId && activeAccountId);
   const includeProjections = options.includeProjections ?? true;
 
   const averages = useQuery({
-    queryKey: [...queryKeys.analytics(userId ?? 0, referenceDate), 'averages'],
+    queryKey: [...queryKeys.analytics(userId ?? 0, activeAccountId ?? 0, referenceDate), 'averages'],
     queryFn: () =>
       getAnalyticsAveragesApi.getAnalyticsAveragesV1({
-        getAnalyticsAveragesV1Request: { referenceDate: date },
+        getAnalyticsAveragesV1Request: { accountId: activeAccountId!, referenceDate: date },
       }),
     enabled,
   });
 
   const projections = useQuery({
-    queryKey: [...queryKeys.analytics(userId ?? 0, referenceDate), 'projections'],
+    queryKey: [...queryKeys.analytics(userId ?? 0, activeAccountId ?? 0, referenceDate), 'projections'],
     queryFn: () =>
       getAnalyticsProjectionsApi.getAnalyticsProjectionsV1({
-        getAnalyticsProjectionsV1Request: { referenceDate: date },
+        getAnalyticsProjectionsV1Request: { accountId: activeAccountId!, referenceDate: date },
       }),
     enabled: enabled && includeProjections,
   });
 
   const categoryBreakdown = useQuery({
-    queryKey: [...queryKeys.analytics(userId ?? 0, referenceDate), 'category-breakdown'],
+    queryKey: [...queryKeys.analytics(userId ?? 0, activeAccountId ?? 0, referenceDate), 'category-breakdown'],
     queryFn: () =>
       getAnalyticsCategoryBreakdownApi.getAnalyticsCategoryBreakdownV1({
-        getAnalyticsAveragesV1Request: { referenceDate: date },
+        getAnalyticsAveragesV1Request: { accountId: activeAccountId!, referenceDate: date },
       }),
     enabled,
   });

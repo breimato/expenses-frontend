@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## deleteCategoryV1
 
-> deleteCategoryV1(id)
+> deleteCategoryV1(accountId, id)
 
 Delete Category V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new DeleteCategoryV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Category identifier
     id: 56,
   } satisfies DeleteCategoryV1Request;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Category identifier | [Defaults to `undefined`] |
 
 ### Return type

@@ -30,6 +30,7 @@ import {
 } from '../models/MovementTypeV1';
 
 export interface GetCategoriesV1Request {
+    accountId: number;
     id?: number;
     name?: string;
     movementType?: MovementTypeV1;
@@ -44,7 +45,18 @@ export class GetCategoriesV1Api extends runtime.BaseAPI {
      * Creates request options for getCategoriesV1 without sending the request
      */
     async getCategoriesV1RequestOpts(requestParameters: GetCategoriesV1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling getCategoriesV1().'
+            );
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         if (requestParameters['id'] != null) {
             queryParameters['id'] = requestParameters['id'];
@@ -94,7 +106,7 @@ export class GetCategoriesV1Api extends runtime.BaseAPI {
      * Get all categories, optionally filtered by search criteria
      * Get Categories V1
      */
-    async getCategoriesV1(requestParameters: GetCategoriesV1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCategoriesV1Response> {
+    async getCategoriesV1(requestParameters: GetCategoriesV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCategoriesV1Response> {
         const response = await this.getCategoriesV1Raw(requestParameters, initOverrides);
         return await response.value();
     }

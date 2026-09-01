@@ -1,10 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './AccountTransferV1';
+export * from './AccountTransferV1Response';
+export * from './AccountV1';
+export * from './AccountV1Response';
 export * from './AnalyticsAveragesV1';
 export * from './AnalyticsCategorySpendItemV1';
 export * from './AnalyticsPeriodAverageV1';
 export * from './AnalyticsProjectionsV1';
-export * from './ApiError';
 export * from './ApiErrorV1';
 export * from './AuthUserV1';
 export * from './AuthV1Response';
@@ -12,6 +15,7 @@ export * from './CategoryV1';
 export * from './CategoryV1Response';
 export * from './ExpenseV1';
 export * from './ExpenseV1Response';
+export * from './GetAccountsV1Response';
 export * from './GetAnalyticsAveragesV1Request';
 export * from './GetAnalyticsAveragesV1Response';
 export * from './GetAnalyticsCategoryBreakdownV1Response';
@@ -24,10 +28,13 @@ export * from './GetCategoriesV1Response';
 export * from './GetExpensesV1Response';
 export * from './GetRecurringTemplatesV1Response';
 export * from './MovementTypeV1';
+export * from './PatchAccountV1Request';
 export * from './PatchCategoryV1Request';
 export * from './PatchExpenseV1Request';
 export * from './PatchProfileV1Request';
 export * from './PatchRecurringTemplateV1Request';
+export * from './PostAccountTransferV1Request';
+export * from './PostAccountV1Request';
 export * from './PostAuthLoginV1Request';
 export * from './PostAuthRegisterV1Request';
 export * from './PostCategoryV1Request';

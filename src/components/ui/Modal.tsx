@@ -9,6 +9,7 @@ interface ModalProps {
   children: ReactNode;
   submitLabel?: string;
   isSubmitting?: boolean;
+  hideCancelButton?: boolean;
 }
 
 export function Modal({
@@ -18,6 +19,7 @@ export function Modal({
   children,
   submitLabel = 'Guardar',
   isSubmitting = false,
+  hideCancelButton = false,
 }: ModalProps) {
   return (
     <div className={styles.overlay} onClick={onClose} role="presentation">
@@ -39,9 +41,11 @@ export function Modal({
         <form className={styles.form} onSubmit={onSubmit}>
           {children}
           <div className={styles.actions}>
-            <Button variant="ghost" onClick={onClose} type="button">
-              Cancelar
-            </Button>
+            {!hideCancelButton && (
+              <Button variant="ghost" onClick={onClose} type="button">
+                Cancelar
+              </Button>
+            )}
             <Button variant="primary" type="submit" disabled={isSubmitting}>
               {submitLabel}
             </Button>

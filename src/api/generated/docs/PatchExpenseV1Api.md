@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## patchExpenseV1
 
-> ExpenseV1Response patchExpenseV1(id, patchExpenseV1Request)
+> ExpenseV1Response patchExpenseV1(accountId, id, patchExpenseV1Request)
 
 Patch Expense V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new PatchExpenseV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Expense identifier
     id: 56,
     // PatchExpenseV1Request
@@ -57,6 +59,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Expense identifier | [Defaults to `undefined`] |
 | **patchExpenseV1Request** | [PatchExpenseV1Request](PatchExpenseV1Request.md) |  | |
 

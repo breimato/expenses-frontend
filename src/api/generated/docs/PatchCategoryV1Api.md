@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## patchCategoryV1
 
-> CategoryV1Response patchCategoryV1(id, patchCategoryV1Request)
+> CategoryV1Response patchCategoryV1(accountId, id, patchCategoryV1Request)
 
 Patch Category V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new PatchCategoryV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Category identifier
     id: 56,
     // PatchCategoryV1Request
@@ -57,6 +59,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Category identifier | [Defaults to `undefined`] |
 | **patchCategoryV1Request** | [PatchCategoryV1Request](PatchCategoryV1Request.md) |  | |
 

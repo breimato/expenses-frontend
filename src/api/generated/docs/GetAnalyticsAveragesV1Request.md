@@ -7,6 +7,7 @@ Get Analytics Averages V1 Request
 
 Name | Type
 ------------ | -------------
+`accountId` | number
 `referenceDate` | Date
 
 ## Example
@@ -16,6 +17,7 @@ import type { GetAnalyticsAveragesV1Request } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "accountId": null,
   "referenceDate": null,
 } satisfies GetAnalyticsAveragesV1Request
 

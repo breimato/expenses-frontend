@@ -20,6 +20,12 @@ import { mapValues } from '../runtime';
  */
 export interface GetAnalyticsAveragesV1Request {
     /**
+     * Account identifier
+     * @type {number}
+     * @memberof GetAnalyticsAveragesV1Request
+     */
+    accountId: number;
+    /**
      * Reference date for averages calculation
      * @type {Date}
      * @memberof GetAnalyticsAveragesV1Request
@@ -31,6 +37,7 @@ export interface GetAnalyticsAveragesV1Request {
  * Check if a given object implements the GetAnalyticsAveragesV1Request interface.
  */
 export function instanceOfGetAnalyticsAveragesV1Request(value: object): value is GetAnalyticsAveragesV1Request {
+    if (!('accountId' in value) || value['accountId'] === undefined) return false;
     if (!('referenceDate' in value) || value['referenceDate'] === undefined) return false;
     return true;
 }
@@ -45,6 +52,7 @@ export function GetAnalyticsAveragesV1RequestFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
+        'accountId': json['accountId'],
         'referenceDate': (new Date(json['referenceDate'])),
     };
 }
@@ -60,6 +68,7 @@ export function GetAnalyticsAveragesV1RequestToJSONTyped(value?: GetAnalyticsAve
 
     return {
         
+        'accountId': value['accountId'],
         'referenceDate': value['referenceDate'].toISOString().substring(0,10),
     };
 }

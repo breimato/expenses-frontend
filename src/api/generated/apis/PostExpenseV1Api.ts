@@ -30,6 +30,7 @@ import {
 } from '../models/PostExpenseV1Request';
 
 export interface PostExpenseV1OperationRequest {
+    accountId: number;
     postExpenseV1Request: PostExpenseV1Request;
 }
 
@@ -42,6 +43,13 @@ export class PostExpenseV1Api extends runtime.BaseAPI {
      * Creates request options for postExpenseV1 without sending the request
      */
     async postExpenseV1RequestOpts(requestParameters: PostExpenseV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling postExpenseV1().'
+            );
+        }
+
         if (requestParameters['postExpenseV1Request'] == null) {
             throw new runtime.RequiredError(
                 'postExpenseV1Request',
@@ -50,6 +58,10 @@ export class PostExpenseV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

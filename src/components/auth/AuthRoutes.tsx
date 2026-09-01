@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { AccountProvider } from '@/context/AccountContext';
 import { useAuth } from '@/context/AuthContext';
 
 export function ProtectedRoute() {
@@ -9,7 +10,11 @@ export function ProtectedRoute() {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  return <Outlet />;
+  return (
+    <AccountProvider>
+      <Outlet />
+    </AccountProvider>
+  );
 }
 
 export function PublicOnlyRoute() {

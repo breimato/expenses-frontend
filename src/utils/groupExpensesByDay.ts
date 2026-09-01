@@ -1,5 +1,6 @@
 import type { ExpenseV1 } from '@/api/generated';
 import { toLocalIsoDate } from '@/utils/format';
+import { movementNetSpendingDelta } from '@/utils/movementType';
 
 export interface ExpenseDayGroup {
   dateKey: string;
@@ -46,7 +47,7 @@ export function groupExpensesByDay(expenses: ExpenseV1[]): ExpenseDayGroup[] {
       expenses: dayExpenses,
       total: dayExpenses.reduce((sum, expense) => {
         const amount = parseAmount(expense.amount);
-        return expense.movementType === 'INCOME' ? sum - amount : sum + amount;
+        return sum + movementNetSpendingDelta(amount, expense.movementType);
       }, 0),
     }));
 }

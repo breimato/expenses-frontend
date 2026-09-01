@@ -4,6 +4,7 @@ import { Amount } from '@/components/ui/Amount';
 import { CategoryLabel } from '@/components/ui/CategoryStripe';
 import { formatDate, toLocalIsoDate } from '@/utils/format';
 import { groupExpensesByDay } from '@/utils/groupExpensesByDay';
+import { isIncomeLike, isTransfer, movementTypeLabel } from '@/utils/movementType';
 import styles from './ExpensesByDayList.module.css';
 
 interface ExpensesByDayListProps {
@@ -27,10 +28,6 @@ function formatDayHeading(dateKey: string): string {
     return 'Ayer';
   }
   return formatDate(dateKey);
-}
-
-function movementTypeLabel(movementType: ExpenseV1['movementType']): string {
-  return movementType === 'INCOME' ? 'Ingreso' : 'Gasto';
 }
 
 export function ExpensesByDayList({
@@ -69,18 +66,37 @@ export function ExpensesByDayList({
                     .join(' ')}
                 >
                   {showMovementType && (
-                    <span className={styles.movementType}>{movementTypeLabel(expense.movementType)}</span>
+                    <span
+                      className={[
+                        styles.movementType,
+                        isTransfer(expense.movementType) && styles.movementTransfer,
+                        isIncomeLike(expense.movementType) ? styles.movementIncome : styles.movementExpense,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      {movementTypeLabel(expense.movementType)}
+                    </span>
                   )}
                   <span className={styles.description}>{expense.description}</span>
                   <span className={styles.category}>
                     <CategoryLabel
                       color={category?.color}
                       icon={category?.icon}
-                      name={category?.name}
+                      name={isTransfer(expense.movementType) ? 'Transferencia' : category?.name}
                       hideNameOnMobile
                     />
                   </span>
-                  <Amount value={expense.amount} className={styles.rowAmount} />
+                  <Amount
+                    value={expense.amount}
+                    className={[
+                      styles.rowAmount,
+                      isIncomeLike(expense.movementType) ? styles.rowAmountIncome : undefined,
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                    signed={isIncomeLike(expense.movementType)}
+                  />
                   {renderActions ? <div className={styles.rowActions}>{renderActions(expense)}</div> : null}
                 </li>
               );

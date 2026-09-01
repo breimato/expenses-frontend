@@ -7,6 +7,7 @@ Get Analytics Period Average V1 Request
 
 Name | Type
 ------------ | -------------
+`accountId` | number
 `dateFrom` | Date
 `dateTo` | Date
 
@@ -17,6 +18,7 @@ import type { GetAnalyticsPeriodAverageV1Request } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "accountId": null,
   "dateFrom": null,
   "dateTo": null,
 } satisfies GetAnalyticsPeriodAverageV1Request

@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## postExpenseV1
 
-> ExpenseV1Response postExpenseV1(postExpenseV1Request)
+> ExpenseV1Response postExpenseV1(accountId, postExpenseV1Request)
 
 Post Expense V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new PostExpenseV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // PostExpenseV1Request
     postExpenseV1Request: ...,
   } satisfies PostExpenseV1OperationRequest;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **postExpenseV1Request** | [PostExpenseV1Request](PostExpenseV1Request.md) |  | |
 
 ### Return type

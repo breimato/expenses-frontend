@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { PeriodAveragePanel } from '@/components/features/PeriodAveragePanel';
 import { Amount } from '@/components/ui/Amount';
 import { StateMessage } from '@/components/ui/StateMessage';
+import { useAccountContext } from '@/context/AccountContext';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { useProfile } from '@/hooks/useProfile';
 import { toMonthValue } from '@/utils/month';
 import styles from './AnalyticsStrip.module.css';
 
@@ -16,12 +16,12 @@ export function AnalyticsStrip({ referenceDate, isCurrentMonth }: AnalyticsStrip
   const { averages, projections } = useAnalytics(referenceDate, {
     includeProjections: isCurrentMonth,
   });
-  const profile = useProfile();
+  const { activeAccount, isLoading: accountsLoading } = useAccountContext();
   const [periodOpen, setPeriodOpen] = useState(false);
   const monthValue = toMonthValue(referenceDate);
 
   const loading =
-    averages.isLoading || (isCurrentMonth && (projections.isLoading || profile.isLoading));
+    averages.isLoading || (isCurrentMonth && (projections.isLoading || accountsLoading));
   if (loading) {
     return <StateMessage message="Calculando resumen…" />;
   }
@@ -34,7 +34,7 @@ export function AnalyticsStrip({ referenceDate, isCurrentMonth }: AnalyticsStrip
   const balanceAsOf = averages.data?.analyticsAverages?.balanceAsOf;
   const endBalance = projections.data?.analyticsProjections?.projectedEndOfMonthBalance;
   const daysRemaining = projections.data?.analyticsProjections?.daysRemainingInMonth;
-  const balance = profile.data?.profile?.balance;
+  const balance = activeAccount?.balance;
 
   return (
     <div className={styles.wrapper}>

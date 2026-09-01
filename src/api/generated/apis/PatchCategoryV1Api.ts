@@ -30,6 +30,7 @@ import {
 } from '../models/PatchCategoryV1Request';
 
 export interface PatchCategoryV1OperationRequest {
+    accountId: number;
     id: number;
     patchCategoryV1Request: PatchCategoryV1Request;
 }
@@ -43,6 +44,13 @@ export class PatchCategoryV1Api extends runtime.BaseAPI {
      * Creates request options for patchCategoryV1 without sending the request
      */
     async patchCategoryV1RequestOpts(requestParameters: PatchCategoryV1OperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling patchCategoryV1().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -58,6 +66,10 @@ export class PatchCategoryV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

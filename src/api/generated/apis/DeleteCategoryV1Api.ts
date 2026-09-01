@@ -20,6 +20,7 @@ import {
 } from '../models/ApiErrorV1';
 
 export interface DeleteCategoryV1Request {
+    accountId: number;
     id: number;
 }
 
@@ -32,6 +33,13 @@ export class DeleteCategoryV1Api extends runtime.BaseAPI {
      * Creates request options for deleteCategoryV1 without sending the request
      */
     async deleteCategoryV1RequestOpts(requestParameters: DeleteCategoryV1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['accountId'] == null) {
+            throw new runtime.RequiredError(
+                'accountId',
+                'Required parameter "accountId" was null or undefined when calling deleteCategoryV1().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -40,6 +48,10 @@ export class DeleteCategoryV1Api extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['accountId'] != null) {
+            queryParameters['accountId'] = requestParameters['accountId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

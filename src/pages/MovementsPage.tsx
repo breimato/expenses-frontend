@@ -17,9 +17,16 @@ import {
   useUpdateExpense,
 } from '@/hooks/useExpenses';
 import { formatAmount, formatDate, toApiAmount, toApiDate, toInputDate, toLocalIsoDate } from '@/utils/format';
+import {
+  isTransfer,
+  MANUAL_MOVEMENT_TYPES,
+  manualMovementTypeLabel,
+  matchesMovementFilter,
+  movementTypeLabel,
+  MOVEMENT_FILTER_OPTIONS,
+  type MovementFilter,
+} from '@/utils/movementType';
 import styles from './Page.module.css';
-
-type MovementTypeFilter = '' | MovementTypeV1;
 
 type MovementFormState = {
   movementType: MovementTypeV1;
@@ -55,31 +62,43 @@ function expenseLinkLabel(expense: ExpenseV1): string {
   return `${date} · ${description} · ${amount}`;
 }
 
+function categoryFilterMovementType(filter: MovementFilter): MovementTypeV1 | undefined {
+  if (!filter || filter === 'TRANSFER') {
+    return undefined;
+  }
+  return filter;
+}
+
 export function MovementsPage() {
-  const [typeFilter, setTypeFilter] = useState<MovementTypeFilter>('');
+  const [typeFilter, setTypeFilter] = useState<MovementFilter>('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [descriptionFilter, setDescriptionFilter] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ExpenseV1 | null>(null);
   const [editing, setEditing] = useState<ExpenseV1 | null>(null);
   const [form, setForm] = useState<MovementFormState>(emptyForm);
 
+  const apiMovementType = categoryFilterMovementType(typeFilter);
+
   const filters = useMemo(
     () => ({
-      movementType: typeFilter || undefined,
-      categoryId: typeFilter && categoryFilter ? Number(categoryFilter) : undefined,
+      movementType: apiMovementType,
+      categoryId: apiMovementType && categoryFilter ? Number(categoryFilter) : undefined,
       expenseDate: dateFilter ? toApiDate(dateFilter) : undefined,
       description: descriptionFilter || undefined,
     }),
-    [typeFilter, categoryFilter, dateFilter, descriptionFilter],
+    [apiMovementType, categoryFilter, dateFilter, descriptionFilter],
   );
 
   const { data: allCategoriesData } = useCategories();
+  const { data: transferOutCategoriesData } = useCategories({ movementType: 'TRANSFER_OUT' });
+  const { data: transferInCategoriesData } = useCategories({ movementType: 'TRANSFER_IN' });
   const { data: filterCategoriesData } = useCategories(
-    typeFilter ? { movementType: typeFilter } : undefined,
+    apiMovementType ? { movementType: apiMovementType } : undefined,
   );
-  const { data: formCategoriesData } = useCategories({ movementType: form.movementType });
+  const formCategoryMovementType = form.movementType;
+  const { data: formCategoriesData } = useCategories({ movementType: formCategoryMovementType });
   const { data, isLoading, isError } = useExpenses(filters);
   const { data: linkableExpensesData } = useExpenses({ movementType: 'EXPENSE' });
   const createMovement = useCreateExpense();
@@ -88,10 +107,22 @@ export function MovementsPage() {
   const { errorMessage, isGuide, showError, clearError } = useErrorDialog();
 
   const allCategories = allCategoriesData?.categories ?? [];
-  const filterCategories = filterCategoriesData?.categories ?? [];
+  const filterCategories =
+    typeFilter === 'TRANSFER'
+      ? [
+          ...(transferOutCategoriesData?.categories ?? []),
+          ...(transferInCategoriesData?.categories ?? []),
+        ]
+      : (filterCategoriesData?.categories ?? []);
   const formCategories = formCategoriesData?.categories ?? [];
   const categoryMap = new Map(allCategories.map((category) => [category.id, category]));
-  const movements = data?.expenses ?? [];
+  const movements = useMemo(() => {
+    const expenses = data?.expenses ?? [];
+    if (typeFilter === 'TRANSFER') {
+      return expenses.filter((expense) => matchesMovementFilter(expense.movementType, typeFilter));
+    }
+    return expenses;
+  }, [data?.expenses, typeFilter]);
   const linkableExpenses = (linkableExpensesData?.expenses ?? [])
     .filter((expense) => expense.id != null && expense.id !== editing?.id)
     .slice()
@@ -105,8 +136,11 @@ export function MovementsPage() {
       return (expenseB.id ?? 0) - (expenseA.id ?? 0);
     });
 
+  const editingTransfer = Boolean(editing && isTransfer(editing.movementType));
+  const formIsTransfer = isTransfer(form.movementType);
+
   const handleTypeFilterChange = (value: string) => {
-    setTypeFilter(value as MovementTypeFilter);
+    setTypeFilter(value as MovementFilter);
     setCategoryFilter('');
   };
 
@@ -158,8 +192,11 @@ export function MovementsPage() {
       form.movementType === 'INCOME' && form.reimbursedExpenseId
         ? Number(form.reimbursedExpenseId)
         : null;
-    const offsetsSpendingAverage =
-      form.movementType === 'INCOME' ? reimbursedExpenseId != null : form.offsetsSpendingAverage;
+    const offsetsSpendingAverage = formIsTransfer
+      ? false
+      : form.movementType === 'INCOME'
+        ? reimbursedExpenseId != null
+        : form.offsetsSpendingAverage;
     try {
       if (editing?.id) {
         const body: PatchExpenseV1Request = {
@@ -169,7 +206,7 @@ export function MovementsPage() {
           expenseDate: toApiDate(form.expenseDate),
           movementType: form.movementType,
           offsetsSpendingAverage,
-          reimbursedExpenseId,
+          reimbursedExpenseId: formIsTransfer ? null : reimbursedExpenseId,
         };
         await updateMovement.mutateAsync({ id: editing.id, body });
       } else {
@@ -191,12 +228,12 @@ export function MovementsPage() {
   };
 
   const handleDelete = async () => {
-    if (!deleteTargetId) {
+    if (!deleteTarget?.id) {
       return;
     }
     try {
-      await deleteMovement.mutateAsync(deleteTargetId);
-      setDeleteTargetId(null);
+      await deleteMovement.mutateAsync(deleteTarget.id);
+      setDeleteTarget(null);
     } catch (error) {
       await showError(error);
     }
@@ -210,7 +247,7 @@ export function MovementsPage() {
       <div className={styles.headerPrimary}>
         <div>
           <h1>Movimientos</h1>
-          <p className={styles.lead}>Gastos e ingresos</p>
+          <p className={styles.lead}>Gastos, ingresos y transferencias</p>
         </div>
         <Button variant="primary" onClick={openCreate}>
           Nuevo movimiento
@@ -220,9 +257,11 @@ export function MovementsPage() {
       <div className={styles.filters}>
         <Field label="Tipo">
           <Select value={typeFilter} onChange={(e) => handleTypeFilterChange(e.target.value)}>
-            <option value="">Todos</option>
-            <option value="EXPENSE">Gasto</option>
-            <option value="INCOME">Ingreso</option>
+            {MOVEMENT_FILTER_OPTIONS.map((option) => (
+              <option key={option.value || 'all'} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </Select>
         </Field>
         {typeFilter && (
@@ -263,7 +302,7 @@ export function MovementsPage() {
                 Editar
               </Button>
               {movement.id && (
-                <Button size="small" variant="danger" onClick={() => setDeleteTargetId(movement.id!)}>
+                <Button size="small" variant="danger" onClick={() => setDeleteTarget(movement)}>
                   Borrar
                 </Button>
               )}
@@ -274,87 +313,151 @@ export function MovementsPage() {
 
       {modalOpen && (
         <Modal
-          title={editing ? 'Editar movimiento' : 'Nuevo movimiento'}
+          title={
+            editingTransfer
+              ? 'Editar transferencia'
+              : editing
+                ? 'Editar movimiento'
+                : 'Nuevo movimiento'
+          }
           onClose={closeModal}
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
         >
-          <Field label="Tipo">
-            <Select required value={form.movementType} onChange={(e) => handleFormMovementTypeChange(e.target.value)}>
-              <option value="EXPENSE">Gasto</option>
-              <option value="INCOME">Ingreso</option>
-            </Select>
-          </Field>
-          <Field label="Categoría">
-            <Select
-              required
-              value={form.categoryId}
-              onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-            >
-              <option value="">Seleccionar…</option>
-              {formCategories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </Select>
-          </Field>
-          <Field label="Importe">
-            <AmountInput
-              required
-              value={form.amount}
-              onChange={(amount) => setForm({ ...form, amount })}
-            />
-          </Field>
-          <Field label="Descripción">
-            <Input
-              required
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-            />
-          </Field>
-          <Field label="Fecha">
-            <Input
-              required
-              type="date"
-              value={form.expenseDate}
-              onChange={(e) => setForm({ ...form, expenseDate: e.target.value })}
-            />
-          </Field>
-          {form.movementType === 'INCOME' ? (
-            <Field label="Gasto reembolsado">
-              <Select value={form.reimbursedExpenseId} onChange={(e) => handleReimbursedExpenseChange(e.target.value)}>
-                <option value="">Ninguno</option>
-                {linkableExpenses.map((expense) => (
-                  <option key={expense.id} value={expense.id}>
-                    {expenseLinkLabel(expense)}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-          ) : (
-            <Field label="Excluir de la media de gastos">
-              <label className={styles.checkboxRow}>
-                <input
-                  type="checkbox"
-                  checked={form.offsetsSpendingAverage}
-                  onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
+          {formIsTransfer ? (
+            <>
+              <Field label="Tipo">
+                <Input readOnly value={movementTypeLabel(form.movementType)} />
+              </Field>
+              <Field label="Sentido">
+                <Input
+                  readOnly
+                  value={form.movementType === 'TRANSFER_IN' ? 'Entrada en esta cuenta' : 'Salida de esta cuenta'}
                 />
-                <span>Para gastos que no quieras contar en la media de consumo diaria</span>
-              </label>
-            </Field>
+              </Field>
+              <Field label="Categoría">
+                <Input readOnly value="Transferencia" />
+              </Field>
+              <Field label="Importe">
+                <AmountInput
+                  required
+                  value={form.amount}
+                  onChange={(amount) => setForm({ ...form, amount })}
+                />
+              </Field>
+              <Field label="Descripción">
+                <Input
+                  required
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                />
+              </Field>
+              <Field label="Fecha">
+                <Input
+                  required
+                  type="date"
+                  value={form.expenseDate}
+                  onChange={(e) => setForm({ ...form, expenseDate: e.target.value })}
+                />
+              </Field>
+              <p className={styles.transferHint}>
+                Los cambios se aplican a la transferencia completa en ambas cuentas.
+              </p>
+            </>
+          ) : (
+            <>
+              <Field label="Tipo">
+                <Select
+                  required
+                  value={form.movementType}
+                  onChange={(e) => handleFormMovementTypeChange(e.target.value)}
+                >
+                  {MANUAL_MOVEMENT_TYPES.map((movementType) => (
+                    <option key={movementType} value={movementType}>
+                      {manualMovementTypeLabel(movementType)}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Categoría">
+                <Select
+                  required
+                  value={form.categoryId}
+                  onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+                >
+                  <option value="">Seleccionar…</option>
+                  {formCategories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Importe">
+                <AmountInput
+                  required
+                  value={form.amount}
+                  onChange={(amount) => setForm({ ...form, amount })}
+                />
+              </Field>
+              <Field label="Descripción">
+                <Input
+                  required
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                />
+              </Field>
+              <Field label="Fecha">
+                <Input
+                  required
+                  type="date"
+                  value={form.expenseDate}
+                  onChange={(e) => setForm({ ...form, expenseDate: e.target.value })}
+                />
+              </Field>
+              {form.movementType === 'INCOME' ? (
+                <Field label="Gasto reembolsado">
+                  <Select
+                    value={form.reimbursedExpenseId}
+                    onChange={(e) => handleReimbursedExpenseChange(e.target.value)}
+                  >
+                    <option value="">Ninguno</option>
+                    {linkableExpenses.map((expense) => (
+                      <option key={expense.id} value={expense.id}>
+                        {expenseLinkLabel(expense)}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              ) : (
+                <Field label="Excluir de la media de gastos">
+                  <label className={styles.checkboxRow}>
+                    <input
+                      type="checkbox"
+                      checked={form.offsetsSpendingAverage}
+                      onChange={(e) => setForm({ ...form, offsetsSpendingAverage: e.target.checked })}
+                    />
+                    <span>Para gastos que no quieras contar en la media de consumo diaria</span>
+                  </label>
+                </Field>
+              )}
+            </>
           )}
         </Modal>
       )}
 
       <ConfirmDialog
-        open={deleteTargetId !== null}
-        title="Eliminar movimiento"
-        message="¿Seguro que quieres eliminar este movimiento? Esta acción no se puede deshacer."
+        open={deleteTarget !== null}
+        title={deleteTarget && isTransfer(deleteTarget.movementType) ? 'Eliminar transferencia' : 'Eliminar movimiento'}
+        message={
+          deleteTarget && isTransfer(deleteTarget.movementType)
+            ? 'Se eliminará la transferencia completa en ambas cuentas. Esta acción no se puede deshacer.'
+            : '¿Seguro que quieres eliminar este movimiento? Esta acción no se puede deshacer.'
+        }
         confirmLabel="Eliminar"
         isLoading={isDeleting}
         onConfirm={handleDelete}
-        onClose={() => setDeleteTargetId(null)}
+        onClose={() => setDeleteTarget(null)}
       />
 
       <ErrorDialog

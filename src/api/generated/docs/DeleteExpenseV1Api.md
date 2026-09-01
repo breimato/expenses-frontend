@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## deleteExpenseV1
 
-> deleteExpenseV1(id)
+> deleteExpenseV1(accountId, id)
 
 Delete Expense V1
 
@@ -34,6 +34,8 @@ async function example() {
   const api = new DeleteExpenseV1Api(config);
 
   const body = {
+    // number | Account id query parameter
+    accountId: 56,
     // number | Expense identifier
     id: 56,
   } satisfies DeleteExpenseV1Request;
@@ -55,6 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **accountId** | `number` | Account id query parameter | [Defaults to `undefined`] |
 | **id** | `number` | Expense identifier | [Defaults to `undefined`] |
 
 ### Return type
