@@ -83,11 +83,14 @@ function renderPieIconLabel({
 
 export function CategorySpendBreakdown({ referenceDate }: { referenceDate?: string }) {
   const { categoryBreakdown } = useAnalytics(referenceDate);
-  const { data: categoriesData } = useCategories({ movementType: 'EXPENSE' });
+  const { data: expenseCategoriesData } = useCategories({ movementType: 'EXPENSE' });
+  const { data: transferOutCategoriesData } = useCategories({ movementType: 'TRANSFER_OUT' });
   const [viewMode, setViewMode] = useState<ViewMode>(readStoredView);
 
   const categoryIconMap = new Map(
-    (categoriesData?.categories ?? []).map((category) => [category.id, category.icon]),
+    [...(expenseCategoriesData?.categories ?? []), ...(transferOutCategoriesData?.categories ?? [])].map(
+      (category) => [category.id, category.icon],
+    ),
   );
 
   const setView = (next: ViewMode) => {
