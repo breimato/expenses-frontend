@@ -1,31 +1,23 @@
 
-# AccountV1
+# GetAccountMembersV1Response
 
-Account V1
+Get account members V1 response
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`id` | number
-`name` | string
-`isDefault` | boolean
-`balance` | string
-`role` | [AccountMemberRoleV1](AccountMemberRoleV1.md)
+`members` | [Array&lt;AccountMemberV1&gt;](AccountMemberV1.md)
 
 ## Example
 
 ```typescript
-import type { AccountV1 } from ''
+import type { GetAccountMembersV1Response } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "id": null,
-  "name": null,
-  "isDefault": null,
-  "balance": null,
-  "role": null,
-} satisfies AccountV1
+  "members": null,
+} satisfies GetAccountMembersV1Response
 
 console.log(example)
 
@@ -34,7 +26,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as AccountV1
+const exampleParsed = JSON.parse(exampleJSON) as GetAccountMembersV1Response
 console.log(exampleParsed)
 ```
 

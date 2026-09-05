@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AccountMemberRoleV1 } from './AccountMemberRoleV1';
+import {
+    AccountMemberRoleV1FromJSON,
+    AccountMemberRoleV1FromJSONTyped,
+    AccountMemberRoleV1ToJSON,
+    AccountMemberRoleV1ToJSONTyped,
+} from './AccountMemberRoleV1';
+
 /**
  * Account V1
  * @export
@@ -43,7 +51,15 @@ export interface AccountV1 {
      * @memberof AccountV1
      */
     balance?: string;
+    /**
+     * 
+     * @type {AccountMemberRoleV1}
+     * @memberof AccountV1
+     */
+    role?: AccountMemberRoleV1;
 }
+
+
 
 /**
  * Check if a given object implements the AccountV1 interface.
@@ -66,6 +82,7 @@ export function AccountV1FromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'name': json['name'] == null ? undefined : json['name'],
         'isDefault': json['isDefault'] == null ? undefined : json['isDefault'],
         'balance': json['balance'] == null ? undefined : json['balance'],
+        'role': json['role'] == null ? undefined : AccountMemberRoleV1FromJSON(json['role']),
     };
 }
 
@@ -84,6 +101,7 @@ export function AccountV1ToJSONTyped(value?: AccountV1 | null, ignoreDiscriminat
         'name': value['name'],
         'isDefault': value['isDefault'],
         'balance': value['balance'],
+        'role': AccountMemberRoleV1ToJSON(value['role']),
     };
 }
 

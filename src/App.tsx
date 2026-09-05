@@ -3,6 +3,7 @@ import { ProtectedRoute, PublicOnlyRoute } from '@/components/auth/AuthRoutes';
 import { AppShell } from '@/components/layout/AppShell';
 import { CategoriesPage } from '@/pages/CategoriesPage';
 import { HomePage } from '@/pages/HomePage';
+import { InvitePage } from '@/pages/InvitePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { MovementsPage } from '@/pages/MovementsPage';
 import { RecurringPage } from '@/pages/RecurringPage';
@@ -16,6 +17,7 @@ export function App() {
         <Route path="register" element={<RegisterPage />} />
       </Route>
       <Route element={<ProtectedRoute />}>
+        <Route path="invitar/:token" element={<InvitePage />} />
         <Route element={<AppShell />}>
           <Route index element={<HomePage />} />
           <Route path="movimientos" element={<MovementsPage />} />

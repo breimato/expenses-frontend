@@ -2,8 +2,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { PatchAccountV1Request, PostAccountTransferV1Request, PostAccountV1Request } from '@/api/generated';
 import {
   getAccountApi,
+  getAccountInvitationApi,
   patchAccountApi,
   postAccountApi,
+  postAccountInvitationAcceptApi,
+  postAccountInvitationApi,
+  postAccountLeaveApi,
   postAccountTransferApi,
 } from '@/api/client';
 import { queryKeys } from '@/api/queryKeys';
@@ -56,6 +60,48 @@ export function useCreateAccountTransfer() {
       queryClient.invalidateQueries({ queryKey: ['account'] });
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
+    },
+  });
+}
+
+export function useCreateAccountInvitation() {
+  return useMutation({
+    mutationFn: (accountId: number) => postAccountInvitationApi.postAccountInvitationV1({ id: accountId }),
+  });
+}
+
+export function useAccountInvitationPreview(token: string | undefined) {
+  return useQuery({
+    queryKey: ['account-invitation', token],
+    queryFn: () => getAccountInvitationApi.getAccountInvitationV1({ token: token! }),
+    enabled: Boolean(token),
+  });
+}
+
+export function useAcceptAccountInvitation() {
+  const queryClient = useQueryClient();
+  const { refreshAccounts, setActiveAccountId } = useAccountContext();
+  return useMutation({
+    mutationFn: (token: string) =>
+      postAccountInvitationAcceptApi.postAccountInvitationAcceptV1({ token }),
+    onSuccess: (accountV1Response) => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      refreshAccounts();
+      if (accountV1Response.account?.id != null) {
+        setActiveAccountId(accountV1Response.account.id);
+      }
+    },
+  });
+}
+
+export function useLeaveAccount() {
+  const queryClient = useQueryClient();
+  const { refreshAccounts } = useAccountContext();
+  return useMutation({
+    mutationFn: (accountId: number) => postAccountLeaveApi.postAccountLeaveV1({ id: accountId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      refreshAccounts();
     },
   });
 }

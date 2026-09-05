@@ -1,8 +1,12 @@
 import { Configuration } from '@/api/generated';
 import {
+  DeleteAccountInvitationV1Api,
+  DeleteAccountMemberV1Api,
   DeleteCategoryV1Api,
   DeleteExpenseV1Api,
   DeleteRecurringTemplateV1Api,
+  GetAccountInvitationV1Api,
+  GetAccountMembersV1Api,
   GetAccountV1Api,
   GetAccountsV1Api,
   GetAnalyticsAveragesV1Api,
@@ -16,6 +20,9 @@ import {
   PatchCategoryV1Api,
   PatchExpenseV1Api,
   PatchRecurringTemplateV1Api,
+  PostAccountInvitationAcceptV1Api,
+  PostAccountInvitationV1Api,
+  PostAccountLeaveV1Api,
   PostAccountTransferV1Api,
   PostAccountV1Api,
   PostAuthLoginV1Api,
@@ -49,6 +56,13 @@ export let getAccountApi = new GetAccountV1Api(config);
 export let postAccountApi = new PostAccountV1Api(config);
 export let patchAccountApi = new PatchAccountV1Api(config);
 export let postAccountTransferApi = new PostAccountTransferV1Api(config);
+export let postAccountInvitationApi = new PostAccountInvitationV1Api(config);
+export let deleteAccountInvitationApi = new DeleteAccountInvitationV1Api(config);
+export let getAccountInvitationApi = new GetAccountInvitationV1Api(config);
+export let postAccountInvitationAcceptApi = new PostAccountInvitationAcceptV1Api(config);
+export let getAccountMembersApi = new GetAccountMembersV1Api(config);
+export let deleteAccountMemberApi = new DeleteAccountMemberV1Api(config);
+export let postAccountLeaveApi = new PostAccountLeaveV1Api(config);
 
 export let getCategoriesApi = new GetCategoriesV1Api(config);
 export let postCategoryApi = new PostCategoryV1Api(config);
@@ -82,6 +96,13 @@ export function initApiClient(): void {
   postAccountApi = new PostAccountV1Api(config);
   patchAccountApi = new PatchAccountV1Api(config);
   postAccountTransferApi = new PostAccountTransferV1Api(config);
+  postAccountInvitationApi = new PostAccountInvitationV1Api(config);
+  deleteAccountInvitationApi = new DeleteAccountInvitationV1Api(config);
+  getAccountInvitationApi = new GetAccountInvitationV1Api(config);
+  postAccountInvitationAcceptApi = new PostAccountInvitationAcceptV1Api(config);
+  getAccountMembersApi = new GetAccountMembersV1Api(config);
+  deleteAccountMemberApi = new DeleteAccountMemberV1Api(config);
+  postAccountLeaveApi = new PostAccountLeaveV1Api(config);
   getCategoriesApi = new GetCategoriesV1Api(config);
   postCategoryApi = new PostCategoryV1Api(config);
   patchCategoryApi = new PatchCategoryV1Api(config);

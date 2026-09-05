@@ -1,12 +1,18 @@
 import { type FormEvent, type MouseEvent, useState } from 'react';
 import type { AccountV1 } from '@/api/generated';
+import { AccountMemberRoleV1 } from '@/api/generated';
 import { Amount } from '@/components/ui/Amount';
 import { Button } from '@/components/ui/Button';
 import { Field, Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { ErrorDialog } from '@/components/ui/ErrorDialog';
 import { useAccountContext } from '@/context/AccountContext';
-import { useCreateAccount, useUpdateAccount } from '@/hooks/useAccounts';
+import {
+  useCreateAccount,
+  useCreateAccountInvitation,
+  useLeaveAccount,
+  useUpdateAccount,
+} from '@/hooks/useAccounts';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { AccountTransferModal } from './AccountTransferModal';
 import styles from './AccountManageModal.module.css';
@@ -15,18 +21,22 @@ type AccountManageModalProps = {
   onClose: () => void;
 };
 
-type PanelView = 'list' | 'create' | 'rename' | 'transfer';
+type PanelView = 'list' | 'create' | 'rename' | 'transfer' | 'invite';
 
 export function AccountManageModal({ onClose }: AccountManageModalProps) {
   const { accounts, activeAccountId, setActiveAccountId } = useAccountContext();
   const createAccount = useCreateAccount();
   const updateAccount = useUpdateAccount();
+  const createInvitation = useCreateAccountInvitation();
+  const leaveAccount = useLeaveAccount();
   const { errorMessage, isGuide, showError, clearError } = useErrorDialog();
 
   const [view, setView] = useState<PanelView>('list');
   const [newAccountName, setNewAccountName] = useState('');
   const [renamingAccount, setRenamingAccount] = useState<AccountV1 | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [inviteLink, setInviteLink] = useState<string | null>(null);
+  const [inviteCopied, setInviteCopied] = useState(false);
 
   const handleSelectAccount = (accountId: number) => {
     setActiveAccountId(accountId);
@@ -38,6 +48,59 @@ export function AccountManageModal({ onClose }: AccountManageModalProps) {
     setRenamingAccount(account);
     setRenameValue(account.name ?? '');
     setView('rename');
+  };
+
+  const openInvite = async (account: AccountV1, event: MouseEvent) => {
+    event.stopPropagation();
+    if (account.id == null) {
+      return;
+    }
+    try {
+      const accountInvitationV1Response = await createInvitation.mutateAsync(account.id);
+      const token = accountInvitationV1Response.invitation?.token;
+      if (!token) {
+        return;
+      }
+      const basePath = import.meta.env.BASE_URL.endsWith('/')
+        ? import.meta.env.BASE_URL
+        : `${import.meta.env.BASE_URL}/`;
+      const inviteUrl = `${window.location.origin}${basePath}invitar/${token}`;
+      setInviteLink(inviteUrl);
+      setInviteCopied(false);
+      setView('invite');
+    } catch (error) {
+      await showError(error);
+    }
+  };
+
+  const handleCopyInvite = async () => {
+    if (!inviteLink) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(inviteLink);
+      setInviteCopied(true);
+    } catch (error) {
+      await showError(error);
+    }
+  };
+
+  const handleLeave = async (account: AccountV1, event: MouseEvent) => {
+    event.stopPropagation();
+    if (account.id == null) {
+      return;
+    }
+    try {
+      await leaveAccount.mutateAsync(account.id);
+      if (activeAccountId === account.id) {
+        const remaining = accounts.find((item) => item.id !== account.id);
+        if (remaining?.id != null) {
+          setActiveAccountId(remaining.id);
+        }
+      }
+    } catch (error) {
+      await showError(error);
+    }
   };
 
   const handleCreateAccount = async (event: FormEvent<HTMLFormElement>) => {
@@ -140,6 +203,51 @@ export function AccountManageModal({ onClose }: AccountManageModalProps) {
     );
   }
 
+  if (view === 'invite' && inviteLink) {
+    return (
+      <>
+        <div className={styles.overlay} onClick={() => setView('list')} role="presentation">
+          <div
+            className={styles.panel}
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="invite-title"
+          >
+            <header className={styles.header}>
+              <div>
+                <h2 id="invite-title" className={styles.title}>
+                  Invitar a la cuenta
+                </h2>
+                <p className={styles.subtitle}>
+                  Comparte este enlace. La otra persona debe tener usuario e iniciar sesión para
+                  vincularse.
+                </p>
+              </div>
+              <Button variant="ghost" size="small" onClick={() => setView('list')} type="button">
+                Cerrar
+              </Button>
+            </header>
+            <Field label="Enlace">
+              <Input readOnly value={inviteLink} onFocus={(event) => event.target.select()} />
+            </Field>
+            <footer className={styles.footer}>
+              <Button variant="primary" type="button" onClick={() => void handleCopyInvite()}>
+                {inviteCopied ? 'Copiado' : 'Copiar enlace'}
+              </Button>
+            </footer>
+          </div>
+        </div>
+        <ErrorDialog
+          open={errorMessage !== null}
+          message={errorMessage ?? ''}
+          isGuide={isGuide}
+          onClose={clearError}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <div className={styles.overlay} onClick={onClose} role="presentation">
@@ -165,6 +273,7 @@ export function AccountManageModal({ onClose }: AccountManageModalProps) {
           <ul className={styles.list}>
             {accounts.map((account) => {
               const isActive = account.id === activeAccountId;
+              const isOwner = account.role === AccountMemberRoleV1.Owner;
               return (
                 <li
                   key={account.id}
@@ -178,7 +287,10 @@ export function AccountManageModal({ onClose }: AccountManageModalProps) {
                     onClick={() => account.id != null && handleSelectAccount(account.id)}
                   >
                     <div className={styles.accountMain}>
-                      <span className={styles.accountName}>{account.name}</span>
+                      <span className={styles.accountName}>
+                        {account.name}
+                        {account.role === AccountMemberRoleV1.Member ? ' · compartida' : ''}
+                      </span>
                       {account.balance != null && (
                         <span className={styles.accountBalance}>
                           <Amount value={account.balance} />
@@ -187,16 +299,43 @@ export function AccountManageModal({ onClose }: AccountManageModalProps) {
                     </div>
                     {isActive && <span className={styles.activeBadge}>Activa</span>}
                   </button>
-                  <Button
-                    size="small"
-                    variant="ghost"
-                    type="button"
-                    className={styles.renameButton}
-                    aria-label={`Renombrar ${account.name}`}
-                    onClick={(event) => openRename(account, event)}
-                  >
-                    Renombrar
-                  </Button>
+                  {isOwner ? (
+                    <>
+                      <Button
+                        size="small"
+                        variant="ghost"
+                        type="button"
+                        className={styles.renameButton}
+                        aria-label={`Invitar a ${account.name}`}
+                        onClick={(event) => void openInvite(account, event)}
+                        disabled={createInvitation.isPending}
+                      >
+                        Invitar
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="ghost"
+                        type="button"
+                        className={styles.renameButton}
+                        aria-label={`Renombrar ${account.name}`}
+                        onClick={(event) => openRename(account, event)}
+                      >
+                        Renombrar
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      size="small"
+                      variant="ghost"
+                      type="button"
+                      className={styles.renameButton}
+                      aria-label={`Salir de ${account.name}`}
+                      onClick={(event) => void handleLeave(account, event)}
+                      disabled={leaveAccount.isPending}
+                    >
+                      Salir
+                    </Button>
+                  )}
                 </li>
               );
             })}

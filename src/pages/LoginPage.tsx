@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ResponseError } from '@/api/generated';
 import { postAuthLoginApi } from '@/api/client';
 import { Button } from '@/components/ui/Button';
@@ -9,11 +9,14 @@ import styles from './AuthPage.module.css';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setSession } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const fromPath =
+    (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? '/';
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -24,7 +27,7 @@ export function LoginPage() {
         postAuthLoginV1Request: { email, password },
       });
       setSession(authV1Response);
-      navigate('/', { replace: true });
+      navigate(fromPath, { replace: true });
     } catch (caught) {
       setError(await readErrorMessage(caught, 'No se pudo iniciar sesión'));
     } finally {
